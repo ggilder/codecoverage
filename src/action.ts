@@ -25,8 +25,8 @@ export async function play(): Promise<void> {
       throw new Error("COVERAGE_FORMAT must be one of lcov, clover")
     }
 
-    const workspace = env.GITHUB_WORKSPACE
-    core.info(`Workspace: ${workspace}`)
+    const workspacePath = env.GITHUB_WORKSPACE || ""
+    core.info(`Workspace: ${workspacePath}`)
 
     // 1. Parse coverage file
     if (COVERAGE_FORMAT == "lcov") {
@@ -43,7 +43,8 @@ export async function play(): Promise<void> {
     const pullRequestFiles = await githubUtil.getPullRequestFiles()
     const annotations = githubUtil.buildAnnotations(
       coverageByFile,
-      pullRequestFiles
+      pullRequestFiles,
+      workspacePath
     )
     // 4. Annotate in github
     await githubUtil.annotate({

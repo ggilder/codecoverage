@@ -1,7 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {Octokit} from 'octokit'
-import {getFileNameFirstItemFromPath,CoverageFile} from './general'
+import {CoverageFile} from './general'
+import * as path from 'path'
 
 export class GithubUtil {
   private client: Octokit
@@ -33,8 +34,7 @@ export class GithubUtil {
     core.info(`Pull Request Files Length: ${response.data.length}`)
     const mySet = new Set<string>()
     for (const item of response.data) {
-      const fileNameFirstItem = getFileNameFirstItemFromPath(item?.filename)
-      if (fileNameFirstItem) mySet.add(fileNameFirstItem)
+      item?.filename && mySet.add(item?.filename)
     }
     core.info(`Filenames: ${mySet}`)
     core.info(`Filename as a set ${mySet.size}`)
@@ -98,17 +98,18 @@ export class GithubUtil {
 
   buildAnnotations(
     coverageFiles: CoverageFile[],
-    pullRequestFiles: Set<string>
+    pullRequestFiles: Set<string>,
+    workspacePath: string
   ): Annotations[] {
     const annotations: Annotations[] = []
     for (const current of coverageFiles) {
       // Only annotate relevant files
-      const fileNameFirstItem = getFileNameFirstItemFromPath(current?.fileName)
-      if (fileNameFirstItem && pullRequestFiles.has(fileNameFirstItem)) {
+      const relPath = path.relative(workspacePath, current?.fileName)
+      if (relPath && pullRequestFiles.has(relPath)) {
         // TODO: coalesce runs of lines into single annotations
         current.missingLineNumbers.map(lineNumber => {
           annotations.push({
-            path: current.fileName,
+            path: relPath,
             start_line: lineNumber,
             end_line: lineNumber,
             start_column: 1,

@@ -40,6 +40,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.play = void 0;
+const node_process_1 = __nccwpck_require__(7742);
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const general_1 = __nccwpck_require__(1266);
@@ -64,6 +65,8 @@ function play() {
             if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
                 throw new Error("COVERAGE_FORMAT must be one of lcov, clover");
             }
+            const workspacePath = node_process_1.env.GITHUB_WORKSPACE || "";
+            core.info(`Workspace: ${workspacePath}`);
             // 1. Parse coverage file
             if (COVERAGE_FORMAT == "lcov") {
                 var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH);
@@ -78,7 +81,7 @@ function play() {
             const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
             // 3. Get current pull request files
             const pullRequestFiles = yield githubUtil.getPullRequestFiles();
-            const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
+            const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, workspacePath);
             // 4. Annotate in github
             yield githubUtil.annotate({
                 referenceCommitHash: githubUtil.getPullRequestRef(),
@@ -185,14 +188,7 @@ exports.parseClover = parseClover;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.filterCoverageByFile = exports.getFileNameFirstItemFromPath = void 0;
-/** input: dist/index.test.ts --> output: index */
-function getFileNameFirstItemFromPath(path) {
-    var _a, _b;
-    const rawFileName = (_a = path === null || path === void 0 ? void 0 : path.split('/')) === null || _a === void 0 ? void 0 : _a.pop();
-    return (_b = rawFileName === null || rawFileName === void 0 ? void 0 : rawFileName.split('.')) === null || _b === void 0 ? void 0 : _b[0];
-}
-exports.getFileNameFirstItemFromPath = getFileNameFirstItemFromPath;
+exports.filterCoverageByFile = void 0;
 function filterCoverageByFile(coverage) {
     return coverage.map(item => {
         var _a;
@@ -249,7 +245,7 @@ exports.GithubUtil = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const octokit_1 = __nccwpck_require__(7467);
-const general_1 = __nccwpck_require__(1266);
+const path = __importStar(__nccwpck_require__(1017));
 class GithubUtil {
     constructor(token) {
         if (!token) {
@@ -274,10 +270,9 @@ class GithubUtil {
             core.info(`Pull Request Files Length: ${response.data.length}`);
             const mySet = new Set();
             for (const item of response.data) {
-                const fileNameFirstItem = (0, general_1.getFileNameFirstItemFromPath)(item === null || item === void 0 ? void 0 : item.filename);
-                if (fileNameFirstItem)
-                    mySet.add(fileNameFirstItem);
+                (item === null || item === void 0 ? void 0 : item.filename) && mySet.add(item === null || item === void 0 ? void 0 : item.filename);
             }
+            core.info(`Filenames: ${mySet}`);
             core.info(`Filename as a set ${mySet.size}`);
             return mySet;
         });
@@ -324,15 +319,16 @@ class GithubUtil {
             return lastResponseStatus;
         });
     }
-    buildAnnotations(coverageFiles, pullRequestFiles) {
+    buildAnnotations(coverageFiles, pullRequestFiles, workspacePath) {
         const annotations = [];
         for (const current of coverageFiles) {
             // Only annotate relevant files
-            const fileNameFirstItem = (0, general_1.getFileNameFirstItemFromPath)(current === null || current === void 0 ? void 0 : current.fileName);
-            if (fileNameFirstItem && pullRequestFiles.has(fileNameFirstItem)) {
+            const relPath = path.relative(workspacePath, current === null || current === void 0 ? void 0 : current.fileName);
+            if (relPath && pullRequestFiles.has(relPath)) {
+                // TODO: coalesce runs of lines into single annotations
                 current.missingLineNumbers.map(lineNumber => {
                     annotations.push({
-                        path: current.fileName,
+                        path: relPath,
                         start_line: lineNumber,
                         end_line: lineNumber,
                         start_column: 1,
@@ -27058,6 +27054,14 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 7742:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:process");
 
 /***/ }),
 
