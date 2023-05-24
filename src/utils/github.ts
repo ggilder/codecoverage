@@ -39,21 +39,57 @@ export class GithubUtil {
     return mySet
   }
   async annotate(input: InputAnnotateParams): Promise<number> {
-    // Todo: make this generic
-    const response = await this.client.rest.checks.create({
-      ...github.context.repo,
-      name: 'Annotate',
-      head_sha: input.referenceCommitHash,
-      status: 'completed',
-      conclusion: 'success',
-      output: {
-        title: 'Coverage Tool',
-        summary: 'Missing Coverage',
-        annotations: input.annotations
+    if (input.annotations.length == 0) {
+      return 0;
+    }
+    // github API lets you post 50 annotations at a time
+    const chunkSize = 50;
+    let chunks: Annotations[][] = [];
+    for (let i = 0; i < input.annotations.length; i += chunkSize) {
+      chunks.push(input.annotations.slice(i, i + chunkSize));
+    }
+    let lastResponseStatus = 0;
+    let checkId;
+    for (let i = 0; i < chunks.length; i++) {
+      let status = 'in_progress';
+      let conclusion = '';
+      if (i == chunks.length - 1) {
+        status = 'completed';
+        conclusion = 'success';
       }
-    })
-    core.info(response.data.output.annotations_url)
-    return response.status
+      let response;
+      if (i == 0) {
+        response = await this.client.rest.checks.create({
+          ...github.context.repo,
+          name: 'Annotate',
+          head_sha: input.referenceCommitHash,
+          status: status,
+          conclusion: conclusion,
+          output: {
+            title: 'Coverage Tool',
+            summary: 'Missing Coverage',
+            annotations: chunks[i]
+          }
+        })
+        checkId = response.data.id;
+      } else {
+        response = await this.client.rest.checks.update({
+          ...github.context.repo,
+          name: 'Annotate',
+          head_sha: input.referenceCommitHash,
+          status: status,
+          conclusion: conclusion,
+          output: {
+            title: 'Coverage Tool',
+            summary: 'Missing Coverage',
+            annotations: chunks[i]
+          }
+        })
+      }
+      core.info(response.data.output.annotations_url);
+      lastResponseStatus = response.status;
+    }
+    return lastResponseStatus;
   }
 
   buildAnnotations(

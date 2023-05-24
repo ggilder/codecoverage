@@ -284,14 +284,44 @@ class GithubUtil {
     }
     annotate(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Todo: make this generic
-            const response = yield this.client.rest.checks.create(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status: 'completed', conclusion: 'success', output: {
-                    title: 'Coverage Tool',
-                    summary: 'Missing Coverage',
-                    annotations: input.annotations
-                } }));
-            core.info(response.data.output.annotations_url);
-            return response.status;
+            if (input.annotations.length == 0) {
+                return 0;
+            }
+            // github API lets you post 50 annotations at a time
+            const chunkSize = 50;
+            let chunks = [];
+            for (let i = 0; i < input.annotations.length; i += chunkSize) {
+                chunks.push(input.annotations.slice(i, i + chunkSize));
+            }
+            let lastResponseStatus = 0;
+            let checkId;
+            for (let i = 0; i < chunks.length; i++) {
+                let status = 'in_progress';
+                let conclusion = '';
+                if (i == chunks.length - 1) {
+                    status = 'completed';
+                    conclusion = 'success';
+                }
+                let response;
+                if (i == 0) {
+                    response = yield this.client.rest.checks.create(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status: status, conclusion: conclusion, output: {
+                            title: 'Coverage Tool',
+                            summary: 'Missing Coverage',
+                            annotations: chunks[i]
+                        } }));
+                    checkId = response.data.id;
+                }
+                else {
+                    response = yield this.client.rest.checks.update(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status: status, conclusion: conclusion, output: {
+                            title: 'Coverage Tool',
+                            summary: 'Missing Coverage',
+                            annotations: chunks[i]
+                        } }));
+                }
+                core.info(response.data.output.annotations_url);
+                lastResponseStatus = response.status;
+            }
+            return lastResponseStatus;
         });
     }
     buildAnnotations(coverageFiles, pullRequestFiles) {
