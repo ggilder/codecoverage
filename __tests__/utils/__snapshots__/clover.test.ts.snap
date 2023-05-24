@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should parse Clover file 1`] = `
+Array [
+  Object {
+    "file": "/var/www/html/app/Actions/MyAction.php",
+    "functions": Object {
+      "details": Array [
+        Object {
+          "hit": 15,
+          "line": 21,
+          "name": "__construct",
+        },
+        Object {
+          "hit": 14,
+          "line": 33,
+          "name": "execute",
+        },
+      ],
+      "found": 2,
+      "hit": 2,
+    },
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 15,
+          "line": 23,
+        },
+        Object {
+          "hit": 15,
+          "line": 24,
+        },
+        Object {
+          "hit": 15,
+          "line": 25,
+        },
+        Object {
+          "hit": 15,
+          "line": 26,
+        },
+        Object {
+          "hit": 15,
+          "line": 27,
+        },
+        Object {
+          "hit": 14,
+          "line": 36,
+        },
+        Object {
+          "hit": 14,
+          "line": 37,
+        },
+        Object {
+          "hit": 1,
+          "line": 38,
+        },
+        Object {
+          "hit": 1,
+          "line": 39,
+        },
+        Object {
+          "hit": 14,
+          "line": 42,
+        },
+        Object {
+          "hit": 14,
+          "line": 43,
+        },
+        Object {
+          "hit": 14,
+          "line": 44,
+        },
+        Object {
+          "hit": 14,
+          "line": 45,
+        },
+        Object {
+          "hit": 14,
+          "line": 46,
+        },
+        Object {
+          "hit": 14,
+          "line": 47,
+        },
+        Object {
+          "hit": 14,
+          "line": 50,
+        },
+        Object {
+          "hit": 14,
+          "line": 51,
+        },
+        Object {
+          "hit": 1,
+          "line": 52,
+        },
+        Object {
+          "hit": 1,
+          "line": 53,
+        },
+        Object {
+          "hit": 1,
+          "line": 54,
+        },
+        Object {
+          "hit": 1,
+          "line": 55,
+        },
+        Object {
+          "hit": 1,
+          "line": 56,
+        },
+        Object {
+          "hit": 1,
+          "line": 57,
+        },
+        Object {
+          "hit": 13,
+          "line": 61,
+        },
+        Object {
+          "hit": 13,
+          "line": 65,
+        },
+        Object {
+          "hit": 13,
+          "line": 67,
+        },
+        Object {
+          "hit": 13,
+          "line": 68,
+        },
+        Object {
+          "hit": 13,
+          "line": 69,
+        },
+        Object {
+          "hit": 13,
+          "line": 70,
+        },
+        Object {
+          "hit": 13,
+          "line": 71,
+        },
+        Object {
+          "hit": 13,
+          "line": 72,
+        },
+        Object {
+          "hit": 13,
+          "line": 74,
+        },
+        Object {
+          "hit": 13,
+          "line": 75,
+        },
+        Object {
+          "hit": 0,
+          "line": 78,
+        },
+      ],
+      "found": 34,
+      "hit": 33,
+    },
+    "title": "App\\\\Actions\\\\MyAction",
+  },
+  Object {
+    "file": "/var/www/html/app/Console/Kernel.php",
+    "functions": Object {
+      "details": Array [
+        Object {
+          "hit": 13,
+          "line": 26,
+          "name": "schedule",
+        },
+      ],
+      "found": 1,
+      "hit": 1,
+    },
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 13,
+          "line": 29,
+        },
+      ],
+      "found": 1,
+      "hit": 1,
+    },
+    "title": "App\\\\Console\\\\Kernel",
+  },
+  Object {
+    "file": "/var/www/html/app/Events/MyEvent.php",
+    "functions": Object {
+      "details": Array [
+        Object {
+          "hit": 0,
+          "line": 16,
+          "name": "__construct",
+        },
+      ],
+      "found": 1,
+      "hit": 0,
+    },
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 0,
+          "line": 18,
+        },
+        Object {
+          "hit": 0,
+          "line": 19,
+        },
+      ],
+      "found": 2,
+      "hit": 0,
+    },
+    "title": "App\\\\Events\\\\MyEvent",
+  },
+]
+`;

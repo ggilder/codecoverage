@@ -1,6 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {filterCoverageByFile, parseLCov} from './utils/lcov'
+import {filterCoverageByFile} from './utils/general'
+import {parseLCov} from './utils/lcov'
+import {parseClover} from './utils/clover'
 import {GithubUtil} from './utils/github'
 
 /** Starting Point of the Github Action*/
@@ -11,15 +13,23 @@ export async function play(): Promise<void> {
       return
     }
     core.info('Performing Code Coverage Analysis')
-    const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN')
-    const LCOV_FILE_PATH = core.getInput('LCOV_FILE_PATH')
+    const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN', { required: true })
+    const COVERAGE_FILE_PATH = core.getInput('COVERAGE_FILE_PATH', { required: true })
 
-    if (!GITHUB_TOKEN || !LCOV_FILE_PATH) {
-      throw new Error('Required Inputs not provided')
+    let COVERAGE_FORMAT = core.getInput('COVERAGE_FORMAT')
+    if (!COVERAGE_FORMAT) {
+      COVERAGE_FORMAT = 'lcov'
+    }
+    if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
+      throw new Error("COVERAGE_FORMAT must be one of lcov, clover")
     }
 
     // 1. Parse coverage file
-    const parsedCov = await parseLCov(LCOV_FILE_PATH)
+    if (COVERAGE_FORMAT == "lcov") {
+      var parsedCov = await parseLCov(COVERAGE_FILE_PATH)
+    } else {
+      var parsedCov = await parseClover(COVERAGE_FILE_PATH)
+    }
     core.info('Parsing done')
     // 2. Filter Coverage By File Name
     const coverageByFile = filterCoverageByFile(parsedCov)
