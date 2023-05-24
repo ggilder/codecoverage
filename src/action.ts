@@ -1,3 +1,4 @@
+import { env } from 'node:process';
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {filterCoverageByFile} from './utils/general'
@@ -23,6 +24,9 @@ export async function play(): Promise<void> {
     if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
       throw new Error("COVERAGE_FORMAT must be one of lcov, clover")
     }
+
+    const workspace = env.GITHUB_WORKSPACE
+    core.info(`Workspace: ${workspace}`)
 
     // 1. Parse coverage file
     if (COVERAGE_FORMAT == "lcov") {

@@ -19,6 +19,7 @@ export class GithubUtil {
       ? pullRequest.head.ref
       : github.context.ref.replace('refs/heads/', '')
   }
+
   /**
    * https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files
    * Todo update types
@@ -35,6 +36,7 @@ export class GithubUtil {
       const fileNameFirstItem = getFileNameFirstItemFromPath(item?.filename)
       if (fileNameFirstItem) mySet.add(fileNameFirstItem)
     }
+    core.info(`Filenames: ${mySet}`)
     core.info(`Filename as a set ${mySet.size}`)
     return mySet
   }
