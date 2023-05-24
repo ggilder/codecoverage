@@ -1,7 +1,9 @@
 import {test} from '@jest/globals'
+import {getFixturePath} from '../fixtures/util'
+import {parseLCov} from '../../src/utils/lcov'
+import {getFileNameFirstItemFromPath,filterCoverageByFile} from '../../src/utils/general'
 
-import {getFileNameFirstItemFromPath} from '../../src/utils/general'
-test.only('getFileNameFirstItemFromPath', function () {
+test('getFileNameFirstItemFromPath', function () {
   const testCases = [
     {
       input: 'a/b/c.test.ts',
@@ -23,4 +25,11 @@ test.only('getFileNameFirstItemFromPath', function () {
   testCases.forEach(test => {
     expect(getFileNameFirstItemFromPath(test.input))
   })
+})
+
+test('filterCoverageByFile', async function () {
+  const path = getFixturePath('lcov.info')
+  const parsedLcov = await parseLCov(path)
+  const output = filterCoverageByFile(parsedLcov)
+  expect(output).toMatchSnapshot()
 })

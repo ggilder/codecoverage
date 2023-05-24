@@ -1,55 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`filterCoverageByFile 1`] = `
-Array [
-  Object {
-    "fileName": "src/utils/general.ts",
-    "missingLineNumbers": Array [
-      3,
-      4,
-    ],
-  },
-  Object {
-    "fileName": "src/utils/github.ts",
-    "missingLineNumbers": Array [
-      12,
-      18,
-      19,
-      28,
-      29,
-      33,
-      34,
-      35,
-      36,
-      37,
-      39,
-      40,
-      44,
-      56,
-      57,
-      64,
-      65,
-      67,
-      68,
-      69,
-      70,
-      82,
-      83,
-    ],
-  },
-  Object {
-    "fileName": "src/utils/lcov.ts",
-    "missingLineNumbers": Array [
-      6,
-      7,
-      9,
-      10,
-      11,
-    ],
-  },
-]
-`;
-
 exports[`should parse lCov file 1`] = `
 Array [
   Object {

@@ -1,8 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {CoverageFile} from './lcov'
 import {Octokit} from 'octokit'
-import {getFileNameFirstItemFromPath} from './general'
+import {getFileNameFirstItemFromPath,CoverageFile} from './general'
 
 export class GithubUtil {
   private client: Octokit
