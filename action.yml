@@ -10,7 +10,7 @@ inputs:
     description: 'path to coverage file'
   COVERAGE_FORMAT:
     required: false
-    description: 'Format of coverage file. May be either `lcov` or `clover`. Defaults to `lcov`."
+    description: 'Format of coverage file. May be either `lcov` or `clover`. Defaults to `lcov`.'
 runs:
   using: 'node16'
   main: 'dist/index.js'
