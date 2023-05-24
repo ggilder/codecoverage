@@ -77,6 +77,7 @@ export class GithubUtil {
           ...github.context.repo,
           name: 'Annotate',
           head_sha: input.referenceCommitHash,
+          check_run_id: checkId,
           status,
           ...(conclusion && {conclusion}),
           output: {

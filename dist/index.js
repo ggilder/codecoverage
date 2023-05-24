@@ -312,7 +312,7 @@ class GithubUtil {
                     checkId = response.data.id;
                 }
                 else {
-                    response = yield this.client.rest.checks.update(Object.assign(Object.assign(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status }), (conclusion && { conclusion })), { output: {
+                    response = yield this.client.rest.checks.update(Object.assign(Object.assign(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, check_run_id: checkId, status }), (conclusion && { conclusion })), { output: {
                             title: 'Coverage Tool',
                             summary: 'Missing Coverage',
                             annotations: chunks[i]
