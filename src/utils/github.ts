@@ -63,8 +63,8 @@ export class GithubUtil {
           ...github.context.repo,
           name: 'Annotate',
           head_sha: input.referenceCommitHash,
-          status: status,
-          conclusion: conclusion,
+          status,
+          ...(conclusion && {conclusion}),
           output: {
             title: 'Coverage Tool',
             summary: 'Missing Coverage',
@@ -77,8 +77,8 @@ export class GithubUtil {
           ...github.context.repo,
           name: 'Annotate',
           head_sha: input.referenceCommitHash,
-          status: status,
-          conclusion: conclusion,
+          status,
+          ...(conclusion && {conclusion}),
           output: {
             title: 'Coverage Tool',
             summary: 'Missing Coverage',
