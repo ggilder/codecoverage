@@ -38,6 +38,7 @@ export class GithubUtil {
     core.info(`Filename as a set ${mySet.size}`)
     return mySet
   }
+
   async annotate(input: InputAnnotateParams): Promise<number> {
     if (input.annotations.length == 0) {
       return 0;
@@ -102,6 +103,7 @@ export class GithubUtil {
       // Only annotate relevant files
       const fileNameFirstItem = getFileNameFirstItemFromPath(current?.fileName)
       if (fileNameFirstItem && pullRequestFiles.has(fileNameFirstItem)) {
+        // TODO: coalesce runs of lines into single annotations
         current.missingLineNumbers.map(lineNumber => {
           annotations.push({
             path: current.fileName,
