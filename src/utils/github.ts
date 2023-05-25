@@ -114,12 +114,13 @@ export class GithubUtil {
           });
           // uncovered range overlaps a modified range in the PR
           if (ok) {
+            const message = uRange.end_line > uRange.start_line ? "These lines are not covered by a test" : "This line is not covered by a test";
             annotations.push({
               path: relPath,
               start_line: uRange.start_line,
               end_line: uRange.end_line,
               annotation_level: 'warning',
-              message: 'This line is not covered by a test'
+              message,
             })
           }
         }

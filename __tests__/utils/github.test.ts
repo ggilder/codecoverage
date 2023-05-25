@@ -57,16 +57,17 @@ test('build annotations', function () {
 
   const coverageFiles = [
     { "fileName": "/workspace/unchanged.txt", "missingLineNumbers": [1,2,3] },
-    { "fileName": "/workspace/file1.txt", "missingLineNumbers": [1,2,3,133,134,135,1007,1008] },
+    { "fileName": "/workspace/file1.txt", "missingLineNumbers": [1,2,3,132,134,135,136,1007,1008] },
     { "fileName": "/workspace/test/dir/file1.txt", "missingLineNumbers": [20,21,22] },
   ]
 
   const annotations = githubUtil.buildAnnotations(coverageFiles, prFiles, "/workspace");
 
   expect(annotations).toEqual([
-    { path: "file1.txt", start_line: 133, end_line: 135, annotation_level: 'warning', message: 'This line is not covered by a test' },
-    { path: "file1.txt", start_line: 1007, end_line: 1008, annotation_level: 'warning', message: 'This line is not covered by a test' },
-    { path: "test/dir/file1.txt", start_line: 20, end_line: 22, annotation_level: 'warning', message: 'This line is not covered by a test' },
+    { path: "file1.txt", start_line: 132, end_line: 132, annotation_level: 'warning', message: 'This line is not covered by a test' },
+    { path: "file1.txt", start_line: 134, end_line: 136, annotation_level: 'warning', message: 'These lines are not covered by a test' },
+    { path: "file1.txt", start_line: 1007, end_line: 1008, annotation_level: 'warning', message: 'These lines are not covered by a test' },
+    { path: "test/dir/file1.txt", start_line: 20, end_line: 22, annotation_level: 'warning', message: 'These lines are not covered by a test' },
   ]);
 })
 
