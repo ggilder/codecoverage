@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parse pull request files 1`] = `
+Object {
+  "file1.txt": Array [
+    Object {
+      "end_line": 139,
+      "start_line": 132,
+    },
+    Object {
+      "end_line": 1007,
+      "start_line": 1000,
+    },
+  ],
+  "test/dir/file1.txt": Array [
+    Object {
+      "end_line": 45,
+      "start_line": 22,
+    },
+  ],
+}
+`;

@@ -260,23 +260,20 @@ class GithubUtil {
             : github.context.ref.replace('refs/heads/', '');
     }
     /**
-     * https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files
-     * Todo update types
-     *  */
+     * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
+     **/
     getPullRequestFiles() {
         return __awaiter(this, void 0, void 0, function* () {
             const pull_number = github.context.issue.number;
             const response = yield this.client.rest.pulls.listFiles(Object.assign(Object.assign({}, github.context.repo), { pull_number }));
             core.info(`Pull Request Files Length: ${response.data.length}`);
-            const mySet = new Set();
-            for (const item of response.data) {
-                (item === null || item === void 0 ? void 0 : item.filename) && mySet.add(item === null || item === void 0 ? void 0 : item.filename);
-            }
-            core.info(`Filenames: ${mySet}`);
-            core.info(`Filename as a set ${mySet.size}`);
-            return mySet;
+            return this.parsePullRequestFiles(response.data);
         });
     }
+    /**
+     * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
+     * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
+     */
     annotate(input) {
         return __awaiter(this, void 0, void 0, function* () {
             if (input.annotations.length == 0) {
@@ -322,25 +319,68 @@ class GithubUtil {
     buildAnnotations(coverageFiles, pullRequestFiles, workspacePath) {
         const annotations = [];
         for (const current of coverageFiles) {
+            const relPath = path.relative(workspacePath, current.fileName);
             // Only annotate relevant files
-            const relPath = path.relative(workspacePath, current === null || current === void 0 ? void 0 : current.fileName);
-            if (relPath && pullRequestFiles.has(relPath)) {
-                // TODO: coalesce runs of lines into single annotations
-                current.missingLineNumbers.map(lineNumber => {
-                    annotations.push({
-                        path: relPath,
-                        start_line: lineNumber,
-                        end_line: lineNumber,
-                        start_column: 1,
-                        end_column: 1,
-                        annotation_level: 'warning',
-                        message: 'this line is not covered by test'
+            const prFileRanges = pullRequestFiles[relPath];
+            if (prFileRanges) {
+                const uncoveredRanges = this.coalesceLineNumbers(current.missingLineNumbers);
+                // Only annotate relevant line ranges
+                for (const uRange of uncoveredRanges) {
+                    const ok = prFileRanges.find(pRange => {
+                        return (uRange.start_line >= pRange.start_line && uRange.start_line <= pRange.end_line) ||
+                            (uRange.end_line >= pRange.start_line && uRange.end_line <= pRange.end_line);
                     });
-                });
+                    // uncovered range overlaps a modified range in the PR
+                    if (ok) {
+                        annotations.push({
+                            path: relPath,
+                            start_line: uRange.start_line,
+                            end_line: uRange.end_line,
+                            start_column: 1,
+                            end_column: 1,
+                            annotation_level: 'warning',
+                            message: 'This line is not covered by a test'
+                        });
+                    }
+                }
             }
         }
         core.info(`Annotation count: ${annotations.length}`);
         return annotations;
+    }
+    parsePullRequestFiles(data) {
+        const files = {};
+        for (const item of data) {
+            files[item.filename] = this.parsePatchRanges(item.patch);
+        }
+        core.info(`Filename count: ${files.length}`);
+        return files;
+    }
+    parsePatchRanges(patch) {
+        let ranges = [];
+        const pattern = /@@ \-\d+,\d+ \+(\d+),(\d+) /g;
+        let match;
+        while (match = pattern.exec(patch)) {
+            const start_line = parseInt(match[1], 10);
+            const end_line = parseInt(match[2], 10) + start_line;
+            const range = { start_line, end_line };
+            ranges.push(range);
+        }
+        return ranges;
+    }
+    coalesceLineNumbers(lines) {
+        const ranges = [];
+        let rstart, rend;
+        for (let i = 0; i < lines.length; i++) {
+            rstart = lines[i];
+            rend = rstart;
+            while (lines[i + 1] - lines[i] === 1) {
+                rend = lines[i + 1];
+                i++;
+            }
+            ranges.push({ start_line: rstart, end_line: rend });
+        }
+        return ranges;
     }
 }
 exports.GithubUtil = GithubUtil;

@@ -22,25 +22,23 @@ export class GithubUtil {
   }
 
   /**
-   * https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files
-   * Todo update types
-   *  */
-  async getPullRequestFiles(): Promise<Set<string>> {
+   * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
+   **/
+  async getPullRequestFiles(): Promise<PullRequestFiles> {
     const pull_number = github.context.issue.number
     const response = await this.client.rest.pulls.listFiles({
       ...github.context.repo,
       pull_number
     })
     core.info(`Pull Request Files Length: ${response.data.length}`)
-    const mySet = new Set<string>()
-    for (const item of response.data) {
-      item?.filename && mySet.add(item?.filename)
-    }
-    core.info(`Filenames: ${mySet}`)
-    core.info(`Filename as a set ${mySet.size}`)
-    return mySet
+
+    return this.parsePullRequestFiles(response.data);
   }
 
+  /**
+   * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
+   * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
+   */
   async annotate(input: InputAnnotateParams): Promise<number> {
     if (input.annotations.length == 0) {
       return 0;
@@ -98,30 +96,78 @@ export class GithubUtil {
 
   buildAnnotations(
     coverageFiles: CoverageFile[],
-    pullRequestFiles: Set<string>,
+    pullRequestFiles: PullRequestFiles,
     workspacePath: string
   ): Annotations[] {
     const annotations: Annotations[] = []
     for (const current of coverageFiles) {
+      const relPath = path.relative(workspacePath, current.fileName)
       // Only annotate relevant files
-      const relPath = path.relative(workspacePath, current?.fileName)
-      if (relPath && pullRequestFiles.has(relPath)) {
-        // TODO: coalesce runs of lines into single annotations
-        current.missingLineNumbers.map(lineNumber => {
-          annotations.push({
-            path: relPath,
-            start_line: lineNumber,
-            end_line: lineNumber,
-            start_column: 1,
-            end_column: 1,
-            annotation_level: 'warning',
-            message: 'this line is not covered by test'
-          })
-        })
+      const prFileRanges = pullRequestFiles[relPath];
+      if (prFileRanges) {
+        const uncoveredRanges = this.coalesceLineNumbers(current.missingLineNumbers);
+        // Only annotate relevant line ranges
+        for (const uRange of uncoveredRanges) {
+          const ok = prFileRanges.find(pRange => {
+            return (uRange.start_line >= pRange.start_line && uRange.start_line <= pRange.end_line) ||
+              (uRange.end_line >= pRange.start_line && uRange.end_line <= pRange.end_line)
+          });
+          // uncovered range overlaps a modified range in the PR
+          if (ok) {
+            annotations.push({
+              path: relPath,
+              start_line: uRange.start_line,
+              end_line: uRange.end_line,
+              start_column: 1,
+              end_column: 1,
+              annotation_level: 'warning',
+              message: 'This line is not covered by a test'
+            })
+          }
+        }
       }
     }
     core.info(`Annotation count: ${annotations.length}`)
     return annotations
+  }
+
+  parsePullRequestFiles(data): PullRequestFiles {
+    const files: PullRequestFiles = {};
+    for (const item of data) {
+      files[item.filename] = this.parsePatchRanges(item.patch);
+    }
+    core.info(`Filename count: ${files.length}`);
+    return files;
+  }
+
+  parsePatchRanges(patch: string): LineRange[] {
+    let ranges: LineRange[] = [];
+    const pattern = /@@ \-\d+,\d+ \+(\d+),(\d+) /g;
+
+    let match;
+    while (match = pattern.exec(patch)) {
+      const start_line = parseInt(match[1], 10);
+      const end_line = parseInt(match[2], 10) + start_line;
+      const range: LineRange = { start_line, end_line };
+      ranges.push(range);
+    }
+
+    return ranges;
+  }
+
+  coalesceLineNumbers(lines: number[]): LineRange[] {
+    const ranges: LineRange[] = [];
+    let rstart, rend;
+    for (let i = 0; i < lines.length; i++) {
+      rstart = lines[i];
+      rend = rstart;
+      while (lines[i + 1] - lines[i] === 1) {
+        rend = lines[i + 1];
+        i++;
+      }
+      ranges.push({ start_line: rstart, end_line: rend });
+    }
+    return ranges;
   }
 }
 
@@ -129,6 +175,7 @@ type InputAnnotateParams = {
   referenceCommitHash: string
   annotations: Annotations[]
 }
+
 type Annotations = {
   path: string
   start_line: number
@@ -137,4 +184,13 @@ type Annotations = {
   end_column: number
   annotation_level: string
   message: string
+}
+
+type LineRange = {
+  start_line: number
+  end_line: number
+}
+
+type PullRequestFiles = {
+  [key: string]: LineRange[]
 }
