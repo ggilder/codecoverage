@@ -25,6 +25,8 @@ export async function play(): Promise<void> {
       throw new Error("COVERAGE_FORMAT must be one of lcov, clover")
     }
 
+    // TODO perhaps make base path configurable in case coverage artifacts are
+    // not produced on the Github worker?
     const workspacePath = env.GITHUB_WORKSPACE || ""
     core.info(`Workspace: ${workspacePath}`)
 
