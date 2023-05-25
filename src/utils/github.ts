@@ -21,11 +21,24 @@ export class GithubUtil {
       : github.context.ref.replace('refs/heads/', '')
   }
 
+  async getPullRequestDiff() {
+    const pull_number = github.context.issue.number;
+    const response = await this.client.rest.pulls.get({
+      ...github.context.repo,
+      pull_number,
+      mediaType: {
+        format: "diff",
+      },
+    });
+    core.info(`PR diff: ${response.data}`);
+  }
+
   /**
    * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
    **/
   async getPullRequestFiles(): Promise<PullRequestFiles> {
     const pull_number = github.context.issue.number
+    // TODO probably need to handle paginated responses
     const response = await this.client.rest.pulls.listFiles({
       ...github.context.repo,
       pull_number

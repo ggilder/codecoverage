@@ -42,6 +42,7 @@ export async function play(): Promise<void> {
     core.info('Filter done')
     const githubUtil = new GithubUtil(GITHUB_TOKEN)
     // 3. Get current pull request files
+    await githubUtil.getPullRequestDiff()
     const pullRequestFiles = await githubUtil.getPullRequestFiles()
     const annotations = githubUtil.buildAnnotations(
       coverageByFile,

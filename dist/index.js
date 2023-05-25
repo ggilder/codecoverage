@@ -82,6 +82,7 @@ function play() {
             core.info('Filter done');
             const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
             // 3. Get current pull request files
+            yield githubUtil.getPullRequestDiff();
             const pullRequestFiles = yield githubUtil.getPullRequestFiles();
             const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, workspacePath);
             // 4. Annotate in github
@@ -261,12 +262,22 @@ class GithubUtil {
             ? pullRequest.head.ref
             : github.context.ref.replace('refs/heads/', '');
     }
+    getPullRequestDiff() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pull_number = github.context.issue.number;
+            const response = yield this.client.rest.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number, mediaType: {
+                    format: "diff",
+                } }));
+            core.info(`PR diff: ${response.data}`);
+        });
+    }
     /**
      * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
      **/
     getPullRequestFiles() {
         return __awaiter(this, void 0, void 0, function* () {
             const pull_number = github.context.issue.number;
+            // TODO probably need to handle paginated responses
             const response = yield this.client.rest.pulls.listFiles(Object.assign(Object.assign({}, github.context.repo), { pull_number }));
             core.info(`Pull Request Files Length: ${response.data.length}`);
             return this.parsePullRequestFiles(response.data);
