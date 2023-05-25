@@ -64,9 +64,9 @@ test('build annotations', function () {
   const annotations = githubUtil.buildAnnotations(coverageFiles, prFiles, "/workspace");
 
   expect(annotations).toEqual([
-    { path: "file1.txt", start_line: 133, end_line: 135, start_column: 1, end_column: 1, annotation_level: 'warning', message: 'This line is not covered by a test' },
-    { path: "file1.txt", start_line: 1007, end_line: 1008, start_column: 1, end_column: 1, annotation_level: 'warning', message: 'This line is not covered by a test' },
-    { path: "test/dir/file1.txt", start_line: 20, end_line: 22, start_column: 1, end_column: 1, annotation_level: 'warning', message: 'This line is not covered by a test' },
+    { path: "file1.txt", start_line: 133, end_line: 135, annotation_level: 'warning', message: 'This line is not covered by a test' },
+    { path: "file1.txt", start_line: 1007, end_line: 1008, annotation_level: 'warning', message: 'This line is not covered by a test' },
+    { path: "test/dir/file1.txt", start_line: 20, end_line: 22, annotation_level: 'warning', message: 'This line is not covered by a test' },
   ]);
 })
 

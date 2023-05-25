@@ -336,8 +336,6 @@ class GithubUtil {
                             path: relPath,
                             start_line: uRange.start_line,
                             end_line: uRange.end_line,
-                            start_column: 1,
-                            end_column: 1,
                             annotation_level: 'warning',
                             message: 'This line is not covered by a test'
                         });

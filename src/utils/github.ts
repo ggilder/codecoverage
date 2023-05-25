@@ -118,8 +118,6 @@ export class GithubUtil {
               path: relPath,
               start_line: uRange.start_line,
               end_line: uRange.end_line,
-              start_column: 1,
-              end_column: 1,
               annotation_level: 'warning',
               message: 'This line is not covered by a test'
             })
@@ -180,8 +178,8 @@ type Annotations = {
   path: string
   start_line: number
   end_line: number
-  start_column: number
-  end_column: number
+  start_column?: number
+  end_column?: number
   annotation_level: string
   message: string
 }
