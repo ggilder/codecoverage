@@ -323,23 +323,18 @@ class GithubUtil {
             // Only annotate relevant files
             const prFileRanges = pullRequestFiles[relPath];
             if (prFileRanges) {
-                const uncoveredRanges = this.coalesceLineNumbers(current.missingLineNumbers);
+                const coverageRanges = this.coalesceLineNumbers(current.missingLineNumbers);
+                const uncoveredRanges = this.intersectRanges(coverageRanges, prFileRanges);
                 // Only annotate relevant line ranges
                 for (const uRange of uncoveredRanges) {
-                    const ok = prFileRanges.find(pRange => {
-                        return (uRange.start_line >= pRange.start_line && uRange.start_line <= pRange.end_line) ||
-                            (uRange.end_line >= pRange.start_line && uRange.end_line <= pRange.end_line);
+                    const message = uRange.end_line > uRange.start_line ? "These lines are not covered by a test" : "This line is not covered by a test";
+                    annotations.push({
+                        path: relPath,
+                        start_line: uRange.start_line,
+                        end_line: uRange.end_line,
+                        annotation_level: 'warning',
+                        message,
                     });
-                    // uncovered range overlaps a modified range in the PR
-                    if (ok) {
-                        annotations.push({
-                            path: relPath,
-                            start_line: uRange.start_line,
-                            end_line: uRange.end_line,
-                            annotation_level: 'warning',
-                            message: 'This line is not covered by a test'
-                        });
-                    }
                 }
             }
         }
@@ -379,6 +374,24 @@ class GithubUtil {
             ranges.push({ start_line: rstart, end_line: rend });
         }
         return ranges;
+    }
+    intersectRanges(rangesA, rangesB) {
+        const outRanges = [];
+        for (const bRange of rangesB) {
+            const aRangeIntersects = rangesA.filter(aRange => {
+                return (bRange.start_line >= aRange.start_line && bRange.start_line <= aRange.end_line) ||
+                    (bRange.end_line >= aRange.start_line && bRange.end_line <= aRange.end_line) ||
+                    (aRange.start_line >= bRange.start_line && aRange.start_line <= bRange.end_line) ||
+                    (aRange.end_line >= bRange.start_line && aRange.end_line <= bRange.end_line);
+            });
+            for (const aRange of aRangeIntersects) {
+                outRanges.push({
+                    start_line: Math.max(aRange.start_line, bRange.start_line),
+                    end_line: Math.min(aRange.end_line, bRange.end_line),
+                });
+            }
+        }
+        return outRanges;
     }
 }
 exports.GithubUtil = GithubUtil;
