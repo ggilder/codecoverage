@@ -65,6 +65,8 @@ function play() {
             if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
                 throw new Error("COVERAGE_FORMAT must be one of lcov, clover");
             }
+            // TODO perhaps make base path configurable in case coverage artifacts are
+            // not produced on the Github worker?
             const workspacePath = node_process_1.env.GITHUB_WORKSPACE || "";
             core.info(`Workspace: ${workspacePath}`);
             // 1. Parse coverage file
