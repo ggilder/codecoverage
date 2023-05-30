@@ -397,7 +397,7 @@ class GithubUtil {
                 prFiles[item.filename] = (0, general_1.coalesceLineNumbers)(item.addedLines);
             }
             // TODO maybe more concise output
-            core.info(`PR diff: ${prFiles}`);
+            core.info(`PR diff: ${JSON.stringify(prFiles)}`);
             return prFiles;
         });
     }

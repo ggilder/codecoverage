@@ -40,7 +40,7 @@ export class GithubUtil {
     }
 
     // TODO maybe more concise output
-    core.info(`PR diff: ${prFiles}`);
+    core.info(`PR diff: ${JSON.stringify(prFiles)}`);
     return prFiles;
   }
 
