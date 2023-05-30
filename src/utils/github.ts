@@ -71,35 +71,29 @@ export class GithubUtil {
         status = 'completed';
         conclusion = 'success';
       }
+      const params = {
+        ...github.context.repo,
+        name: 'Annotate',
+        head_sha: input.referenceCommitHash,
+        status,
+        ...(conclusion && {conclusion}),
+        output: {
+          title: 'Coverage Tool',
+          summary: 'Missing Coverage',
+          annotations: chunks[i]
+        }
+      };
       let response;
       if (i == 0) {
         response = await this.client.rest.checks.create({
-          ...github.context.repo,
-          name: 'Annotate',
-          head_sha: input.referenceCommitHash,
-          status,
-          ...(conclusion && {conclusion}),
-          output: {
-            title: 'Coverage Tool',
-            summary: 'Missing Coverage',
-            annotations: chunks[i]
-          }
-        })
+          ...params
+        });
         checkId = response.data.id;
       } else {
         response = await this.client.rest.checks.update({
-          ...github.context.repo,
-          name: 'Annotate',
-          head_sha: input.referenceCommitHash,
+          ...params,
           check_run_id: checkId,
-          status,
-          ...(conclusion && {conclusion}),
-          output: {
-            title: 'Coverage Tool',
-            summary: 'Missing Coverage',
-            annotations: chunks[i]
-          }
-        })
+        });
       }
       core.info(response.data.output.annotations_url);
       lastResponseStatus = response.status;
