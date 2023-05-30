@@ -82,8 +82,7 @@ function play() {
             core.info('Filter done');
             const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
             // 3. Get current pull request files
-            // TODO switch to using getPullRequestDiff() and parsing files and ranges out of diff instead
-            const pullRequestFiles = yield githubUtil.getPullRequestFiles();
+            const pullRequestFiles = yield githubUtil.getPullRequestDiff();
             const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, workspacePath);
             // 4. Annotate in github
             yield githubUtil.annotate({
@@ -181,6 +180,92 @@ function parseClover(path) {
     });
 }
 exports.parseClover = parseClover;
+
+
+/***/ }),
+
+/***/ 4629:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseGitDiff = void 0;
+function parseGitDiff(diffOutput) {
+    const fileDiffs = [];
+    const lines = diffOutput.split('\n');
+    let currentFileDiff;
+    let currentAddedLines = [];
+    let currentDeletedLines = [];
+    let seenHeaderLine = false;
+    let deletionCurrentLineNumber = 0;
+    let additionCurrentLineNumber = 0;
+    for (const line of lines) {
+        if (line.startsWith('diff --git')) {
+            // New file diff starts
+            if (currentFileDiff) {
+                currentFileDiff.addedLines = currentAddedLines;
+                currentFileDiff.deletedLines = currentDeletedLines;
+                fileDiffs.push(currentFileDiff);
+            }
+            currentFileDiff = {
+                filename: getFilenameFromDiffHeader(line),
+                addedLines: [],
+                deletedLines: [],
+            };
+            currentAddedLines = [];
+            currentDeletedLines = [];
+            seenHeaderLine = false;
+        }
+        else if (line.startsWith('@@')) {
+            // Header line
+            seenHeaderLine = true;
+            const lineInfo = getLineInfoFromHeaderLine(line);
+            deletionCurrentLineNumber = lineInfo.deletionStartingLineNumber;
+            additionCurrentLineNumber = lineInfo.additionStartingLineNumber;
+        }
+        else if (line.startsWith('+') && seenHeaderLine) {
+            // Added line
+            currentAddedLines.push(additionCurrentLineNumber);
+            additionCurrentLineNumber++;
+        }
+        else if (line.startsWith('-') && seenHeaderLine) {
+            // Deleted line
+            currentDeletedLines.push(deletionCurrentLineNumber);
+            deletionCurrentLineNumber++;
+        }
+        else if (seenHeaderLine) {
+            // Context line
+            deletionCurrentLineNumber++;
+            additionCurrentLineNumber++;
+        }
+    }
+    // Add the last file diff
+    if (currentFileDiff) {
+        currentFileDiff.addedLines = currentAddedLines;
+        currentFileDiff.deletedLines = currentDeletedLines;
+        fileDiffs.push(currentFileDiff);
+    }
+    return fileDiffs;
+}
+exports.parseGitDiff = parseGitDiff;
+function getFilenameFromDiffHeader(header) {
+    // Extract the filename from the diff header
+    const startIndex = header.indexOf(' a/') + 3;
+    const endIndex = header.indexOf(' b/', startIndex);
+    const filename = header.substring(startIndex, endIndex);
+    return filename;
+}
+function getLineInfoFromHeaderLine(line) {
+    // Extract the starting line numbers for each side of the diff
+    const matches = line.match(/\-(\d+),?(\d+)? \+(\d+),?(\d+)? @@/);
+    if (matches && matches.length === 5) {
+        const deletionStartingLineNumber = parseInt(matches[1], 10);
+        const additionStartingLineNumber = parseInt(matches[3], 10);
+        return { deletionStartingLineNumber, additionStartingLineNumber };
+    }
+    return { deletionStartingLineNumber: 0, additionStartingLineNumber: 0 };
+}
 
 
 /***/ }),
@@ -283,6 +368,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const octokit_1 = __nccwpck_require__(7467);
 const general_1 = __nccwpck_require__(1266);
+const diff = __importStar(__nccwpck_require__(4629));
 const path = __importStar(__nccwpck_require__(1017));
 class GithubUtil {
     constructor(token) {
@@ -303,9 +389,19 @@ class GithubUtil {
             const response = yield this.client.rest.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number, mediaType: {
                     format: "diff",
                 } }));
-            core.info(`PR diff: ${response.data}`);
+            // With mediaType param, response.data is actually a string, but the response type doesn't reflect this
+            // @ts-expect-error
+            const fileLines = diff.parseGitDiff(response.data);
+            const prFiles = {};
+            for (const item of fileLines) {
+                prFiles[item.filename] = (0, general_1.coalesceLineNumbers)(item.addedLines);
+            }
+            // TODO maybe more concise output
+            core.info(`PR diff: ${prFiles}`);
+            return prFiles;
         });
     }
+    // TODO remove in favor of diff based
     /**
      * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
      **/

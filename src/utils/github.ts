@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {Octokit} from 'octokit'
 import {CoverageFile, LineRange, coalesceLineNumbers, intersectLineRanges} from './general'
+import * as diff from './diff'
 import * as path from 'path'
 
 export class GithubUtil {
@@ -21,7 +22,7 @@ export class GithubUtil {
       : github.context.ref.replace('refs/heads/', '')
   }
 
-  async getPullRequestDiff() {
+  async getPullRequestDiff(): Promise<PullRequestFiles> {
     const pull_number = github.context.issue.number;
     const response = await this.client.rest.pulls.get({
       ...github.context.repo,
@@ -30,9 +31,20 @@ export class GithubUtil {
         format: "diff",
       },
     });
-    core.info(`PR diff: ${response.data}`);
+    // With mediaType param, response.data is actually a string, but the response type doesn't reflect this
+    // @ts-expect-error
+    const fileLines = diff.parseGitDiff(response.data);
+    const prFiles: PullRequestFiles = {};
+    for (const item of fileLines) {
+      prFiles[item.filename] = coalesceLineNumbers(item.addedLines);
+    }
+
+    // TODO maybe more concise output
+    core.info(`PR diff: ${prFiles}`);
+    return prFiles;
   }
 
+  // TODO remove in favor of diff based
   /**
    * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
    **/
