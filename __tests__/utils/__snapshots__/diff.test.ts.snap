@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should parse Git diff 1`] = `
+Array [
+  Object {
+    "addedLines": Array [
+      2,
+      5,
+      11,
+      14,
+    ],
+    "deletedLines": Array [
+      2,
+    ],
+    "filename": "file1.txt",
+  },
+  Object {
+    "addedLines": Array [
+      1,
+    ],
+    "deletedLines": Array [
+      1,
+    ],
+    "filename": "file2.txt",
+  },
+]
+`;
