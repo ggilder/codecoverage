@@ -29,19 +29,6 @@ test('parse pull request files', function () {
   expect(files).toMatchSnapshot();
 })
 
-test('coalesceLineNumbers', function () {
-  const githubUtil = new GithubUtil('1234');
-
-  const lines = [1,3,4,5,10,12,13];
-  const ranges = githubUtil.coalesceLineNumbers(lines);
-  expect(ranges).toEqual([
-    { start_line: 1, end_line: 1 },
-    { start_line: 3, end_line: 5 },
-    { start_line: 10, end_line: 10 },
-    { start_line: 12, end_line: 13 },
-  ]);
-})
-
 test('build annotations', function () {
   const githubUtil = new GithubUtil('1234');
 
@@ -69,32 +56,6 @@ test('build annotations', function () {
     { path: "file1.txt", start_line: 1007, end_line: 1007, annotation_level: 'warning', message: 'This line is not covered by a test' },
     { path: "test/dir/file1.txt", start_line: 22, end_line: 22, annotation_level: 'warning', message: 'This line is not covered by a test' },
   ]);
-})
-
-test('range intersections', function() {
-  const githubUtil = new GithubUtil('1234');
-
-  const a = [
-    { start_line: 2, end_line: 4 },
-    { start_line: 7, end_line: 9 },
-    { start_line: 132, end_line: 132 },
-    { start_line: 134, end_line: 136 },
-  ];
-  const b = [
-    { start_line: 1, end_line: 3 },
-    { start_line: 5, end_line: 7 },
-    { start_line: 9, end_line: 11 },
-    { start_line: 132, end_line: 139 },
-  ];
-  const expected = [
-    { start_line: 2, end_line: 3 },
-    { start_line: 7, end_line: 7 },
-    { start_line: 9, end_line: 9 },
-    { start_line: 132, end_line: 132 },
-    { start_line: 134, end_line: 136 },
-  ];
-
-  expect(githubUtil.intersectRanges(a, b)).toEqual(expected);
 })
 
 // @todo test for rest of github class

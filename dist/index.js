@@ -82,7 +82,7 @@ function play() {
             core.info('Filter done');
             const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
             // 3. Get current pull request files
-            yield githubUtil.getPullRequestDiff();
+            // TODO switch to using getPullRequestDiff() and parsing files and ranges out of diff instead
             const pullRequestFiles = yield githubUtil.getPullRequestFiles();
             const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, workspacePath);
             // 4. Annotate in github
@@ -191,7 +191,7 @@ exports.parseClover = parseClover;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.filterCoverageByFile = void 0;
+exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
 function filterCoverageByFile(coverage) {
     return coverage.map(item => {
         var _a;
@@ -202,6 +202,40 @@ function filterCoverageByFile(coverage) {
     });
 }
 exports.filterCoverageByFile = filterCoverageByFile;
+function coalesceLineNumbers(lines) {
+    const ranges = [];
+    let rstart, rend;
+    for (let i = 0; i < lines.length; i++) {
+        rstart = lines[i];
+        rend = rstart;
+        while (lines[i + 1] - lines[i] === 1) {
+            rend = lines[i + 1];
+            i++;
+        }
+        ranges.push({ start_line: rstart, end_line: rend });
+    }
+    return ranges;
+}
+exports.coalesceLineNumbers = coalesceLineNumbers;
+function intersectLineRanges(rangesA, rangesB) {
+    const outRanges = [];
+    for (const bRange of rangesB) {
+        const aRangeIntersects = rangesA.filter(aRange => {
+            return (bRange.start_line >= aRange.start_line && bRange.start_line <= aRange.end_line) ||
+                (bRange.end_line >= aRange.start_line && bRange.end_line <= aRange.end_line) ||
+                (aRange.start_line >= bRange.start_line && aRange.start_line <= bRange.end_line) ||
+                (aRange.end_line >= bRange.start_line && aRange.end_line <= bRange.end_line);
+        });
+        for (const aRange of aRangeIntersects) {
+            outRanges.push({
+                start_line: Math.max(aRange.start_line, bRange.start_line),
+                end_line: Math.min(aRange.end_line, bRange.end_line),
+            });
+        }
+    }
+    return outRanges;
+}
+exports.intersectLineRanges = intersectLineRanges;
 
 
 /***/ }),
@@ -248,6 +282,7 @@ exports.GithubUtil = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const octokit_1 = __nccwpck_require__(7467);
+const general_1 = __nccwpck_require__(1266);
 const path = __importStar(__nccwpck_require__(1017));
 class GithubUtil {
     constructor(token) {
@@ -307,21 +342,18 @@ class GithubUtil {
                     status = 'completed';
                     conclusion = 'success';
                 }
+                const params = Object.assign(Object.assign(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status }), (conclusion && { conclusion })), { output: {
+                        title: 'Coverage Tool',
+                        summary: 'Missing Coverage',
+                        annotations: chunks[i]
+                    } });
                 let response;
                 if (i == 0) {
-                    response = yield this.client.rest.checks.create(Object.assign(Object.assign(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status }), (conclusion && { conclusion })), { output: {
-                            title: 'Coverage Tool',
-                            summary: 'Missing Coverage',
-                            annotations: chunks[i]
-                        } }));
+                    response = yield this.client.rest.checks.create(Object.assign({}, params));
                     checkId = response.data.id;
                 }
                 else {
-                    response = yield this.client.rest.checks.update(Object.assign(Object.assign(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, check_run_id: checkId, status }), (conclusion && { conclusion })), { output: {
-                            title: 'Coverage Tool',
-                            summary: 'Missing Coverage',
-                            annotations: chunks[i]
-                        } }));
+                    response = yield this.client.rest.checks.update(Object.assign(Object.assign({}, params), { check_run_id: checkId }));
                 }
                 core.info(response.data.output.annotations_url);
                 lastResponseStatus = response.status;
@@ -336,8 +368,8 @@ class GithubUtil {
             // Only annotate relevant files
             const prFileRanges = pullRequestFiles[relPath];
             if (prFileRanges) {
-                const coverageRanges = this.coalesceLineNumbers(current.missingLineNumbers);
-                const uncoveredRanges = this.intersectRanges(coverageRanges, prFileRanges);
+                const coverageRanges = (0, general_1.coalesceLineNumbers)(current.missingLineNumbers);
+                const uncoveredRanges = (0, general_1.intersectLineRanges)(coverageRanges, prFileRanges);
                 // Only annotate relevant line ranges
                 for (const uRange of uncoveredRanges) {
                     const message = uRange.end_line > uRange.start_line ? "These lines are not covered by a test" : "This line is not covered by a test";
@@ -354,6 +386,7 @@ class GithubUtil {
         core.info(`Annotation count: ${annotations.length}`);
         return annotations;
     }
+    // TODO remove, replacing with diff-based
     parsePullRequestFiles(data) {
         const files = {};
         for (const item of data) {
@@ -362,6 +395,7 @@ class GithubUtil {
         core.info(`Filename count: ${files.length}`);
         return files;
     }
+    // TODO remove, replacing with diff-based
     parsePatchRanges(patch) {
         let ranges = [];
         const pattern = /@@ \-\d+,\d+ \+(\d+),(\d+) /g;
@@ -373,38 +407,6 @@ class GithubUtil {
             ranges.push(range);
         }
         return ranges;
-    }
-    coalesceLineNumbers(lines) {
-        const ranges = [];
-        let rstart, rend;
-        for (let i = 0; i < lines.length; i++) {
-            rstart = lines[i];
-            rend = rstart;
-            while (lines[i + 1] - lines[i] === 1) {
-                rend = lines[i + 1];
-                i++;
-            }
-            ranges.push({ start_line: rstart, end_line: rend });
-        }
-        return ranges;
-    }
-    intersectRanges(rangesA, rangesB) {
-        const outRanges = [];
-        for (const bRange of rangesB) {
-            const aRangeIntersects = rangesA.filter(aRange => {
-                return (bRange.start_line >= aRange.start_line && bRange.start_line <= aRange.end_line) ||
-                    (bRange.end_line >= aRange.start_line && bRange.end_line <= aRange.end_line) ||
-                    (aRange.start_line >= bRange.start_line && aRange.start_line <= bRange.end_line) ||
-                    (aRange.end_line >= bRange.start_line && aRange.end_line <= bRange.end_line);
-            });
-            for (const aRange of aRangeIntersects) {
-                outRanges.push({
-                    start_line: Math.max(aRange.start_line, bRange.start_line),
-                    end_line: Math.min(aRange.end_line, bRange.end_line),
-                });
-            }
-        }
-        return outRanges;
     }
 }
 exports.GithubUtil = GithubUtil;

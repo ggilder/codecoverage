@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {Octokit} from 'octokit'
-import {CoverageFile} from './general'
+import {CoverageFile, LineRange, coalesceLineNumbers, intersectLineRanges} from './general'
 import * as path from 'path'
 
 export class GithubUtil {
@@ -112,8 +112,8 @@ export class GithubUtil {
       // Only annotate relevant files
       const prFileRanges = pullRequestFiles[relPath];
       if (prFileRanges) {
-        const coverageRanges = this.coalesceLineNumbers(current.missingLineNumbers);
-        const uncoveredRanges = this.intersectRanges(coverageRanges, prFileRanges);
+        const coverageRanges = coalesceLineNumbers(current.missingLineNumbers);
+        const uncoveredRanges = intersectLineRanges(coverageRanges, prFileRanges);
 
         // Only annotate relevant line ranges
         for (const uRange of uncoveredRanges) {
@@ -132,6 +132,7 @@ export class GithubUtil {
     return annotations
   }
 
+  // TODO remove, replacing with diff-based
   parsePullRequestFiles(data): PullRequestFiles {
     const files: PullRequestFiles = {};
     for (const item of data) {
@@ -141,6 +142,7 @@ export class GithubUtil {
     return files;
   }
 
+  // TODO remove, replacing with diff-based
   parsePatchRanges(patch: string): LineRange[] {
     let ranges: LineRange[] = [];
     const pattern = /@@ \-\d+,\d+ \+(\d+),(\d+) /g;
@@ -154,40 +156,6 @@ export class GithubUtil {
     }
 
     return ranges;
-  }
-
-  coalesceLineNumbers(lines: number[]): LineRange[] {
-    const ranges: LineRange[] = [];
-    let rstart, rend;
-    for (let i = 0; i < lines.length; i++) {
-      rstart = lines[i];
-      rend = rstart;
-      while (lines[i + 1] - lines[i] === 1) {
-        rend = lines[i + 1];
-        i++;
-      }
-      ranges.push({ start_line: rstart, end_line: rend });
-    }
-    return ranges;
-  }
-
-  intersectRanges(rangesA, rangesB: LineRange[]): LineRange[] {
-    const outRanges: LineRange[] = [];
-    for (const bRange of rangesB) {
-      const aRangeIntersects = rangesA.filter(aRange => {
-        return (bRange.start_line >= aRange.start_line && bRange.start_line <= aRange.end_line) ||
-          (bRange.end_line >= aRange.start_line && bRange.end_line <= aRange.end_line) ||
-          (aRange.start_line >= bRange.start_line && aRange.start_line <= bRange.end_line) ||
-          (aRange.end_line >= bRange.start_line && aRange.end_line <= bRange.end_line)
-      });
-      for (const aRange of aRangeIntersects) {
-        outRanges.push({
-          start_line: Math.max(aRange.start_line, bRange.start_line),
-          end_line: Math.min(aRange.end_line, bRange.end_line),
-        });
-      }
-    }
-    return outRanges;
   }
 }
 
@@ -204,11 +172,6 @@ type Annotations = {
   end_column?: number
   annotation_level: string
   message: string
-}
-
-type LineRange = {
-  start_line: number
-  end_line: number
 }
 
 type PullRequestFiles = {
