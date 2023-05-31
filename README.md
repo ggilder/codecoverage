@@ -1,6 +1,6 @@
-[![Coverage Status](https://coveralls.io/repos/github/shravan097/codecoverage/badge.svg?branch=main)](https://coveralls.io/github/shravan097/codecoverage?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/ggilder/codecoverage/badge.svg?branch=main)](https://coveralls.io/github/ggilder/codecoverage?branch=main)
 
-![Build Status](https://github.com/shravan097/codecoverage/actions/workflows/test.yml/badge.svg)
+![Build Status](https://github.com/ggilder/codecoverage/actions/workflows/test.yml/badge.svg)
 
 # Code Coverage Annotation
 
@@ -22,7 +22,7 @@ Generate code coverage annotation in pull request within Github Action Workflow 
 ## Example
 ```yaml
 - name: Code Coverage Annotation Line by Line
-  uses: shravan097/codecoverage@release/v0.5.1
+  uses: ggilder/codecoverage@release/v0.5.1
   with:
     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     COVERAGE_FILE_PATH: "./coverage/lcov.info"

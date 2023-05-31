@@ -1,6 +1,6 @@
 name: 'Code Coverage Annotation Line by Line'
 description: 'Coverage Annotation Line by Line per commit'
-author: 'Shravan'
+author: '@ggilder'
 inputs:
   GITHUB_TOKEN:
     required: true
