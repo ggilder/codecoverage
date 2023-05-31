@@ -9,7 +9,8 @@ export function filterCoverageByFile(coverage: CoverageParsed): CoverageFile[] {
 
 export function coalesceLineNumbers(lines: number[]): LineRange[] {
   const ranges: LineRange[] = []
-  let rstart, rend
+  let rstart
+  let rend
   for (let i = 0; i < lines.length; i++) {
     rstart = lines[i]
     rend = rstart

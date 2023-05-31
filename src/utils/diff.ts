@@ -11,9 +11,9 @@ export function parseGitDiff(diffOutput: string): FileDiff[] {
   let currentFileDiff: FileDiff | undefined
   let currentAddedLines: number[] = []
   let currentDeletedLines: number[] = []
-  let seenHeaderLine: boolean = false
-  let deletionCurrentLineNumber: number = 0
-  let additionCurrentLineNumber: number = 0
+  let seenHeaderLine = false
+  let deletionCurrentLineNumber = 0
+  let additionCurrentLineNumber = 0
 
   for (const line of lines) {
     if (line.startsWith('diff --git')) {
@@ -76,7 +76,7 @@ function getLineInfoFromHeaderLine(line: string): {
   additionStartingLineNumber: number
 } {
   // Extract the starting line numbers for each side of the diff
-  const matches = line.match(/\-(\d+),?(\d+)? \+(\d+),?(\d+)? @@/)
+  const matches = line.match(/-(\d+),?(\d+)? \+(\d+),?(\d+)? @@/)
   if (matches && matches.length === 5) {
     const deletionStartingLineNumber = parseInt(matches[1], 10)
     const additionStartingLineNumber = parseInt(matches[3], 10)

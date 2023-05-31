@@ -1,7 +1,7 @@
 import * as NodeUtil from 'util'
 import * as fs from 'fs'
-import parser from 'lcov-parse'
 import {CoverageParsed} from './general'
+import parser from 'lcov-parse'
 
 export async function parseLCov(lcovPath: string): Promise<CoverageParsed> {
   if (!lcovPath) {

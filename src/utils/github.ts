@@ -1,14 +1,14 @@
 import * as core from '@actions/core'
+import * as diff from './diff'
 import * as github from '@actions/github'
-import {Octokit} from 'octokit'
+import * as path from 'path'
 import {
   CoverageFile,
   LineRange,
   coalesceLineNumbers,
   intersectLineRanges
 } from './general'
-import * as diff from './diff'
-import * as path from 'path'
+import {Octokit} from 'octokit'
 
 export class GithubUtil {
   private client: Octokit
@@ -36,8 +36,7 @@ export class GithubUtil {
         format: 'diff'
       }
     })
-    // With mediaType param, response.data is actually a string, but the response type doesn't reflect this
-    // @ts-expect-error
+    // @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
     const fileLines = diff.parseGitDiff(response.data)
     const prFiles: PullRequestFiles = {}
     for (const item of fileLines) {
@@ -54,12 +53,12 @@ export class GithubUtil {
    * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
    */
   async annotate(input: InputAnnotateParams): Promise<number> {
-    if (input.annotations.length == 0) {
+    if (input.annotations.length === 0) {
       return 0
     }
     // github API lets you post 50 annotations at a time
     const chunkSize = 50
-    let chunks: Annotations[][] = []
+    const chunks: Annotations[][] = []
     for (let i = 0; i < input.annotations.length; i += chunkSize) {
       chunks.push(input.annotations.slice(i, i + chunkSize))
     }
@@ -68,7 +67,7 @@ export class GithubUtil {
     for (let i = 0; i < chunks.length; i++) {
       let status = 'in_progress'
       let conclusion = ''
-      if (i == chunks.length - 1) {
+      if (i === chunks.length - 1) {
         status = 'completed'
         conclusion = 'success'
       }
@@ -85,7 +84,7 @@ export class GithubUtil {
         }
       }
       let response
-      if (i == 0) {
+      if (i === 0) {
         response = await this.client.rest.checks.create({
           ...params
         })
