@@ -39,25 +39,9 @@ export class GithubUtil {
       prFiles[item.filename] = coalesceLineNumbers(item.addedLines);
     }
 
-    // TODO maybe more concise output
+    // TODO might need to make this output more concise for large diffs
     core.info(`PR diff: ${JSON.stringify(prFiles)}`);
     return prFiles;
-  }
-
-  // TODO remove in favor of diff based
-  /**
-   * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
-   **/
-  async getPullRequestFiles(): Promise<PullRequestFiles> {
-    const pull_number = github.context.issue.number
-    // TODO probably need to handle paginated responses
-    const response = await this.client.rest.pulls.listFiles({
-      ...github.context.repo,
-      pull_number
-    })
-    core.info(`Pull Request Files Length: ${response.data.length}`)
-
-    return this.parsePullRequestFiles(response.data);
   }
 
   /**
@@ -142,32 +126,6 @@ export class GithubUtil {
     }
     core.info(`Annotation count: ${annotations.length}`)
     return annotations
-  }
-
-  // TODO remove, replacing with diff-based
-  parsePullRequestFiles(data): PullRequestFiles {
-    const files: PullRequestFiles = {};
-    for (const item of data) {
-      files[item.filename] = this.parsePatchRanges(item.patch);
-    }
-    core.info(`Filename count: ${files.length}`);
-    return files;
-  }
-
-  // TODO remove, replacing with diff-based
-  parsePatchRanges(patch: string): LineRange[] {
-    let ranges: LineRange[] = [];
-    const pattern = /@@ \-\d+,\d+ \+(\d+),(\d+) /g;
-
-    let match;
-    while (match = pattern.exec(patch)) {
-      const start_line = parseInt(match[1], 10);
-      const end_line = parseInt(match[2], 10) + start_line;
-      const range: LineRange = { start_line, end_line };
-      ranges.push(range);
-    }
-
-    return ranges;
   }
 }
 

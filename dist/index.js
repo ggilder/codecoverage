@@ -396,22 +396,9 @@ class GithubUtil {
             for (const item of fileLines) {
                 prFiles[item.filename] = (0, general_1.coalesceLineNumbers)(item.addedLines);
             }
-            // TODO maybe more concise output
+            // TODO might need to make this output more concise for large diffs
             core.info(`PR diff: ${JSON.stringify(prFiles)}`);
             return prFiles;
-        });
-    }
-    // TODO remove in favor of diff based
-    /**
-     * https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
-     **/
-    getPullRequestFiles() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const pull_number = github.context.issue.number;
-            // TODO probably need to handle paginated responses
-            const response = yield this.client.rest.pulls.listFiles(Object.assign(Object.assign({}, github.context.repo), { pull_number }));
-            core.info(`Pull Request Files Length: ${response.data.length}`);
-            return this.parsePullRequestFiles(response.data);
         });
     }
     /**
@@ -481,28 +468,6 @@ class GithubUtil {
         }
         core.info(`Annotation count: ${annotations.length}`);
         return annotations;
-    }
-    // TODO remove, replacing with diff-based
-    parsePullRequestFiles(data) {
-        const files = {};
-        for (const item of data) {
-            files[item.filename] = this.parsePatchRanges(item.patch);
-        }
-        core.info(`Filename count: ${files.length}`);
-        return files;
-    }
-    // TODO remove, replacing with diff-based
-    parsePatchRanges(patch) {
-        let ranges = [];
-        const pattern = /@@ \-\d+,\d+ \+(\d+),(\d+) /g;
-        let match;
-        while (match = pattern.exec(patch)) {
-            const start_line = parseInt(match[1], 10);
-            const end_line = parseInt(match[2], 10) + start_line;
-            const range = { start_line, end_line };
-            ranges.push(range);
-        }
-        return ranges;
     }
 }
 exports.GithubUtil = GithubUtil;

@@ -10,25 +10,6 @@ test('github init to throw error', function () {
   expect(() => new GithubUtil('')).toThrowError('GITHUB_TOKEN is missing')
 })
 
-test('parse pull request files', function () {
-  const githubUtil = new GithubUtil('1234');
-
-  const data = [
-    {
-      "filename": "file1.txt",
-      "patch": "@@ -132,7 +132,7 @@ module Test @@ -1000,7 +1000,7 @@ module Test"
-    },
-    {
-      "filename": "test/dir/file1.txt",
-      "patch": "@@ -22,25 +22,23 @@ export class GithubUtil"
-    }
-  ]
-
-  const files = githubUtil.parsePullRequestFiles(data);
-
-  expect(files).toMatchSnapshot();
-})
-
 test('build annotations', function () {
   const githubUtil = new GithubUtil('1234');
 
