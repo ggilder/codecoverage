@@ -1,4 +1,4 @@
-import { env } from 'node:process';
+import {env} from 'node:process'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {filterCoverageByFile} from './utils/general'
@@ -14,24 +14,26 @@ export async function play(): Promise<void> {
       return
     }
     core.info('Performing Code Coverage Analysis')
-    const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN', { required: true })
-    const COVERAGE_FILE_PATH = core.getInput('COVERAGE_FILE_PATH', { required: true })
+    const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN', {required: true})
+    const COVERAGE_FILE_PATH = core.getInput('COVERAGE_FILE_PATH', {
+      required: true
+    })
 
     let COVERAGE_FORMAT = core.getInput('COVERAGE_FORMAT')
     if (!COVERAGE_FORMAT) {
       COVERAGE_FORMAT = 'lcov'
     }
     if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
-      throw new Error("COVERAGE_FORMAT must be one of lcov, clover")
+      throw new Error('COVERAGE_FORMAT must be one of lcov, clover')
     }
 
     // TODO perhaps make base path configurable in case coverage artifacts are
     // not produced on the Github worker?
-    const workspacePath = env.GITHUB_WORKSPACE || ""
+    const workspacePath = env.GITHUB_WORKSPACE || ''
     core.info(`Workspace: ${workspacePath}`)
 
     // 1. Parse coverage file
-    if (COVERAGE_FORMAT == "lcov") {
+    if (COVERAGE_FORMAT == 'lcov') {
       var parsedCov = await parseLCov(COVERAGE_FILE_PATH)
     } else {
       var parsedCov = await parseClover(COVERAGE_FILE_PATH)

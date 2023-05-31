@@ -7,5 +7,5 @@ export async function parseClover(path: string): Promise<CoverageParsed> {
     throw Error('No Clover XML path provided')
   }
   const fileRaw = fs.readFileSync(path, 'utf8')
-  return clover.parseContent(fileRaw);
+  return clover.parseContent(fileRaw)
 }

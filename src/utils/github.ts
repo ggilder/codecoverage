@@ -1,7 +1,12 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {Octokit} from 'octokit'
-import {CoverageFile, LineRange, coalesceLineNumbers, intersectLineRanges} from './general'
+import {
+  CoverageFile,
+  LineRange,
+  coalesceLineNumbers,
+  intersectLineRanges
+} from './general'
 import * as diff from './diff'
 import * as path from 'path'
 
@@ -23,25 +28,25 @@ export class GithubUtil {
   }
 
   async getPullRequestDiff(): Promise<PullRequestFiles> {
-    const pull_number = github.context.issue.number;
+    const pull_number = github.context.issue.number
     const response = await this.client.rest.pulls.get({
       ...github.context.repo,
       pull_number,
       mediaType: {
-        format: "diff",
-      },
-    });
+        format: 'diff'
+      }
+    })
     // With mediaType param, response.data is actually a string, but the response type doesn't reflect this
     // @ts-expect-error
-    const fileLines = diff.parseGitDiff(response.data);
-    const prFiles: PullRequestFiles = {};
+    const fileLines = diff.parseGitDiff(response.data)
+    const prFiles: PullRequestFiles = {}
     for (const item of fileLines) {
-      prFiles[item.filename] = coalesceLineNumbers(item.addedLines);
+      prFiles[item.filename] = coalesceLineNumbers(item.addedLines)
     }
 
     // TODO might need to make this output more concise for large diffs
-    core.info(`PR diff: ${JSON.stringify(prFiles)}`);
-    return prFiles;
+    core.info(`PR diff: ${JSON.stringify(prFiles)}`)
+    return prFiles
   }
 
   /**
@@ -50,22 +55,22 @@ export class GithubUtil {
    */
   async annotate(input: InputAnnotateParams): Promise<number> {
     if (input.annotations.length == 0) {
-      return 0;
+      return 0
     }
     // github API lets you post 50 annotations at a time
-    const chunkSize = 50;
-    let chunks: Annotations[][] = [];
+    const chunkSize = 50
+    let chunks: Annotations[][] = []
     for (let i = 0; i < input.annotations.length; i += chunkSize) {
-      chunks.push(input.annotations.slice(i, i + chunkSize));
+      chunks.push(input.annotations.slice(i, i + chunkSize))
     }
-    let lastResponseStatus = 0;
-    let checkId;
+    let lastResponseStatus = 0
+    let checkId
     for (let i = 0; i < chunks.length; i++) {
-      let status = 'in_progress';
-      let conclusion = '';
+      let status = 'in_progress'
+      let conclusion = ''
       if (i == chunks.length - 1) {
-        status = 'completed';
-        conclusion = 'success';
+        status = 'completed'
+        conclusion = 'success'
       }
       const params = {
         ...github.context.repo,
@@ -78,23 +83,23 @@ export class GithubUtil {
           summary: 'Missing Coverage',
           annotations: chunks[i]
         }
-      };
-      let response;
+      }
+      let response
       if (i == 0) {
         response = await this.client.rest.checks.create({
           ...params
-        });
-        checkId = response.data.id;
+        })
+        checkId = response.data.id
       } else {
         response = await this.client.rest.checks.update({
           ...params,
-          check_run_id: checkId,
-        });
+          check_run_id: checkId
+        })
       }
-      core.info(response.data.output.annotations_url);
-      lastResponseStatus = response.status;
+      core.info(response.data.output.annotations_url)
+      lastResponseStatus = response.status
     }
-    return lastResponseStatus;
+    return lastResponseStatus
   }
 
   buildAnnotations(
@@ -106,20 +111,26 @@ export class GithubUtil {
     for (const current of coverageFiles) {
       const relPath = path.relative(workspacePath, current.fileName)
       // Only annotate relevant files
-      const prFileRanges = pullRequestFiles[relPath];
+      const prFileRanges = pullRequestFiles[relPath]
       if (prFileRanges) {
-        const coverageRanges = coalesceLineNumbers(current.missingLineNumbers);
-        const uncoveredRanges = intersectLineRanges(coverageRanges, prFileRanges);
+        const coverageRanges = coalesceLineNumbers(current.missingLineNumbers)
+        const uncoveredRanges = intersectLineRanges(
+          coverageRanges,
+          prFileRanges
+        )
 
         // Only annotate relevant line ranges
         for (const uRange of uncoveredRanges) {
-          const message = uRange.end_line > uRange.start_line ? "These lines are not covered by a test" : "This line is not covered by a test";
+          const message =
+            uRange.end_line > uRange.start_line
+              ? 'These lines are not covered by a test'
+              : 'This line is not covered by a test'
           annotations.push({
             path: relPath,
             start_line: uRange.start_line,
             end_line: uRange.end_line,
             annotation_level: 'warning',
-            message,
+            message
           })
         }
       }
