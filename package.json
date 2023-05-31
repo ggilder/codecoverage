@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "description": "GitHub Action to annotate PRs with lines that are missing test coverage",
-  "main": "dist/index.js",
+  "main": "src/main.ts",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
