@@ -45203,27 +45203,32 @@ function coalesceLineNumbers(lines) {
     return ranges;
 }
 exports.coalesceLineNumbers = coalesceLineNumbers;
-function intersectLineRanges(rangesA, rangesB) {
-    const outRanges = [];
-    for (const bRange of rangesB) {
-        const aRangeIntersects = rangesA.filter(aRange => {
-            return ((bRange.start_line >= aRange.start_line &&
-                bRange.start_line <= aRange.end_line) ||
-                (bRange.end_line >= aRange.start_line &&
-                    bRange.end_line <= aRange.end_line) ||
-                (aRange.start_line >= bRange.start_line &&
-                    aRange.start_line <= bRange.end_line) ||
-                (aRange.end_line >= bRange.start_line &&
-                    aRange.end_line <= bRange.end_line));
-        });
-        for (const aRange of aRangeIntersects) {
-            outRanges.push({
-                start_line: Math.max(aRange.start_line, bRange.start_line),
-                end_line: Math.min(aRange.end_line, bRange.end_line)
-            });
+function intersectLineRanges(a, b) {
+    const result = [];
+    let i = 0;
+    let j = 0;
+    while (i < a.length && j < b.length) {
+        const rangeA = a[i];
+        const rangeB = b[j];
+        if (rangeA.end_line < rangeB.start_line) {
+            i++;
+        }
+        else if (rangeB.end_line < rangeA.start_line) {
+            j++;
+        }
+        else {
+            const start = Math.max(rangeA.start_line, rangeB.start_line);
+            const end = Math.min(rangeA.end_line, rangeB.end_line);
+            result.push({ start_line: start, end_line: end });
+            if (rangeA.end_line < rangeB.end_line) {
+                i++;
+            }
+            else {
+                j++;
+            }
         }
     }
-    return outRanges;
+    return result;
 }
 exports.intersectLineRanges = intersectLineRanges;
 
