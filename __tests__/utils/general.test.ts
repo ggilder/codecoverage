@@ -27,13 +27,13 @@ test('coalesceLineNumbers', function () {
 
 test('range intersections', function () {
   const a = [
-    {start_line: 2, end_line: 4},
+    {start_line: 1, end_line: 4},
     {start_line: 7, end_line: 9},
     {start_line: 132, end_line: 132},
     {start_line: 134, end_line: 136}
   ]
   const b = [
-    {start_line: 1, end_line: 3},
+    {start_line: 2, end_line: 3},
     {start_line: 5, end_line: 7},
     {start_line: 9, end_line: 11},
     {start_line: 132, end_line: 139}
