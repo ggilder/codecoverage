@@ -11068,6 +11068,127 @@ module.exports = function fromEntries (iterable) {
 
 /***/ }),
 
+/***/ 6441:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var fs = __nccwpck_require__( 7147 );
+
+var parse = {};
+
+parse.parseContent = function ( text, cb )
+{
+    var files = [];
+    var modes = text.split( "mode:" );
+
+    if( !modes.length )
+    {
+        return cb( new Error( "No coverage found" ) );
+    }
+
+    modes.forEach( function ( mode )
+    {
+        if( !mode.length )
+        {
+            return;
+        }
+
+        var lines = mode.replace( "\r\n", "\n" ).split( /[\n\r]/g );
+        lines = lines.slice( 1 ); // the first line is just the mode type
+
+        lines.forEach( function ( line )
+        {
+            var parts = line.split( ":" );
+            if( !parts.length )
+            {
+                return;
+            }
+
+            var path = parts[ 0 ];
+            var values = parts[ 1 ];
+
+            if( !path || !values )
+            {
+                return;
+            }
+
+            if( !files[ files.length - 1 ] || files[ files.length - 1 ].file !== path )
+            {
+                var name = path.split( "/" );
+                name = name[ name.length - 1 ];
+
+                files.push( {
+                    title: name,
+                    file: path,
+                    lines: {
+                        found: 0,
+                        hit: 0,
+                        details: []
+                    }
+                } );
+            }
+
+            var file = files[ files.length - 1 ];
+
+            var startLine = Number( values.split( "," )[ 0 ].split( "." )[ 0 ] );
+            var endLine = Number( values.split( "," )[ 1 ].split( "." )[ 0 ] );
+            var hit = Number( values.split( " " )[ 2 ] );
+
+            file.lines.found += endLine - startLine + 1;
+            for( var lineNumber = startLine; lineNumber <= endLine; lineNumber++ )
+            {
+                var existingLine = file.lines.details.filter( function ( ex )
+                {
+                    return ex.line === lineNumber;
+                } )[ 0 ];
+
+                if( existingLine )
+                {
+                    existingLine.hit += hit;
+                }
+                else
+                {
+                    file.lines.details.push( {
+                        line: lineNumber,
+                        hit: hit
+                    } );
+                }
+            }
+        } );
+    } );
+
+
+    files.forEach( function ( file )
+    {
+        file.lines.hit = file.lines.details.reduce( function ( acc, val )
+        {
+            return acc + ( val.hit > 0 ? 1 : 0 );
+        }, 0 );
+    } );
+
+    cb( null, files );
+};
+
+parse.parseFile = function ( file, cb )
+{
+    fs.readFile( file, "utf8", function ( err, content )
+    {
+        if( err )
+        {
+            return cb( err );
+        }
+
+        parse.parseContent( content, cb );
+    } );
+};
+
+module.exports = parse;
+
+
+/***/ }),
+
 /***/ 8043:
 /***/ ((module) => {
 
@@ -44944,7 +45065,9 @@ const github = __importStar(__nccwpck_require__(5438));
 const general_1 = __nccwpck_require__(8915);
 const lcov_1 = __nccwpck_require__(196);
 const clover_1 = __nccwpck_require__(9569);
+const gocoverage_1 = __nccwpck_require__(4721);
 const github_1 = __nccwpck_require__(1225);
+const SUPPORTED_FORMATS = ['lcov', 'clover', 'go'];
 /** Starting Point of the Github Action*/
 function play() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -44962,19 +45085,23 @@ function play() {
             if (!COVERAGE_FORMAT) {
                 COVERAGE_FORMAT = 'lcov';
             }
-            if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
-                throw new Error('COVERAGE_FORMAT must be one of lcov, clover');
+            if (!SUPPORTED_FORMATS.includes(COVERAGE_FORMAT)) {
+                throw new Error(`COVERAGE_FORMAT must be one of ${SUPPORTED_FORMATS.join(',')}`);
             }
             // TODO perhaps make base path configurable in case coverage artifacts are
             // not produced on the Github worker?
             const workspacePath = node_process_1.env.GITHUB_WORKSPACE || '';
             core.info(`Workspace: ${workspacePath}`);
             // 1. Parse coverage file
-            if (COVERAGE_FORMAT == 'lcov') {
-                var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH);
+            if (COVERAGE_FORMAT === 'clover') {
+                var parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH, workspacePath);
+            }
+            else if (COVERAGE_FORMAT === 'go') {
+                var parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH);
             }
             else {
-                var parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH);
+                // lcov default
+                var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH);
             }
             core.info('Parsing done');
             // 2. Filter Coverage By File Name
@@ -44983,7 +45110,7 @@ function play() {
             const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
             // 3. Get current pull request files
             const pullRequestFiles = yield githubUtil.getPullRequestDiff();
-            const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, workspacePath);
+            const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
             // 4. Annotate in github
             yield githubUtil.annotate({
                 referenceCommitHash: githubUtil.getPullRequestRef(),
@@ -45070,13 +45197,21 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseClover = void 0;
 const clover = __importStar(__nccwpck_require__(3356));
 const fs = __importStar(__nccwpck_require__(7147));
-function parseClover(path) {
+const path = __importStar(__nccwpck_require__(1017));
+function parseClover(coveragePath, workspacePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!path) {
+        if (!coveragePath) {
             throw Error('No Clover XML path provided');
         }
-        const fileRaw = fs.readFileSync(path, 'utf8');
-        return clover.parseContent(fileRaw);
+        if (!workspacePath) {
+            throw Error('No workspace path provided');
+        }
+        const fileRaw = fs.readFileSync(coveragePath, 'utf8');
+        const parsed = yield clover.parseContent(fileRaw);
+        for (const entry of parsed) {
+            entry.file = path.relative(workspacePath, entry.file);
+        }
+        return parsed;
     });
 }
 exports.parseClover = parseClover;
@@ -45176,7 +45311,7 @@ function getLineInfoFromHeaderLine(line) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
+exports.longestCommonSubpath = exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
 function filterCoverageByFile(coverage) {
     return coverage.map(item => {
         var _a;
@@ -45231,6 +45366,29 @@ function intersectLineRanges(a, b) {
     return result;
 }
 exports.intersectLineRanges = intersectLineRanges;
+function longestCommonSubpath(paths) {
+    if (paths.length === 0) {
+        return '';
+    }
+    const splitPaths = paths.map(path => {
+        const parts = path.split('/');
+        return parts.slice(0, parts.length - 1);
+    });
+    let longest = '';
+    let currentSubpath = '';
+    for (let i = 0; i < splitPaths[0].length; i++) {
+        const currentSegment = splitPaths[0][i];
+        for (let j = 1; j < splitPaths.length; j++) {
+            if (splitPaths[j][i] !== currentSegment) {
+                return longest;
+            }
+        }
+        currentSubpath += `${currentSegment}/`;
+        longest = currentSubpath;
+    }
+    return longest;
+}
+exports.longestCommonSubpath = longestCommonSubpath;
 
 
 /***/ }),
@@ -45277,7 +45435,6 @@ exports.GithubUtil = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const diff = __importStar(__nccwpck_require__(8087));
 const github = __importStar(__nccwpck_require__(5438));
-const path = __importStar(__nccwpck_require__(1017));
 const general_1 = __nccwpck_require__(8915);
 const octokit_1 = __nccwpck_require__(7467);
 class GithubUtil {
@@ -45353,12 +45510,11 @@ class GithubUtil {
             return lastResponseStatus;
         });
     }
-    buildAnnotations(coverageFiles, pullRequestFiles, workspacePath) {
+    buildAnnotations(coverageFiles, pullRequestFiles) {
         const annotations = [];
         for (const current of coverageFiles) {
-            const relPath = path.relative(workspacePath, current.fileName);
             // Only annotate relevant files
-            const prFileRanges = pullRequestFiles[relPath];
+            const prFileRanges = pullRequestFiles[current.fileName];
             if (prFileRanges) {
                 const coverageRanges = (0, general_1.coalesceLineNumbers)(current.missingLineNumbers);
                 const uncoveredRanges = (0, general_1.intersectLineRanges)(coverageRanges, prFileRanges);
@@ -45368,7 +45524,7 @@ class GithubUtil {
                         ? 'These lines are not covered by a test'
                         : 'This line is not covered by a test';
                     annotations.push({
-                        path: relPath,
+                        path: current.fileName,
                         start_line: uRange.start_line,
                         end_line: uRange.end_line,
                         annotation_level: 'warning',
@@ -45382,6 +45538,78 @@ class GithubUtil {
     }
 }
 exports.GithubUtil = GithubUtil;
+
+
+/***/ }),
+
+/***/ 4721:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseGoCoverage = void 0;
+const fs = __importStar(__nccwpck_require__(7147));
+const gocov = __importStar(__nccwpck_require__(6441));
+const path = __importStar(__nccwpck_require__(1017));
+const general_1 = __nccwpck_require__(8915);
+function parseGoCoverage(coveragePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!coveragePath) {
+            throw Error('No Go coverage path provided');
+        }
+        const fileRaw = fs.readFileSync(coveragePath, 'utf8');
+        return new Promise((resolve, reject) => {
+            gocov.parseContent(fileRaw, (err, result) => {
+                if (err === null) {
+                    filterModulePaths(result);
+                    resolve(result);
+                }
+                reject(err);
+            });
+        });
+    });
+}
+exports.parseGoCoverage = parseGoCoverage;
+function filterModulePaths(entries) {
+    const allPaths = entries.map(entry => entry.file);
+    const basePath = (0, general_1.longestCommonSubpath)(allPaths);
+    for (const entry of entries) {
+        entry.file = path.relative(basePath, entry.file);
+    }
+}
 
 
 /***/ }),
