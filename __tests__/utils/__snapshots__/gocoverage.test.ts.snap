@@ -1,0 +1,2344 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should parse Go coverage file 1`] = `
+Array [
+  Object {
+    "file": "bitrot.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 57,
+        },
+        Object {
+          "hit": 1,
+          "line": 58,
+        },
+        Object {
+          "hit": 1,
+          "line": 59,
+        },
+        Object {
+          "hit": 0,
+          "line": 60,
+        },
+        Object {
+          "hit": 0,
+          "line": 61,
+        },
+        Object {
+          "hit": 1,
+          "line": 62,
+        },
+        Object {
+          "hit": 1,
+          "line": 65,
+        },
+        Object {
+          "hit": 1,
+          "line": 66,
+        },
+        Object {
+          "hit": 1,
+          "line": 67,
+        },
+        Object {
+          "hit": 0,
+          "line": 68,
+        },
+        Object {
+          "hit": 0,
+          "line": 69,
+        },
+        Object {
+          "hit": 1,
+          "line": 70,
+        },
+        Object {
+          "hit": 1,
+          "line": 71,
+        },
+        Object {
+          "hit": 1,
+          "line": 72,
+        },
+        Object {
+          "hit": 0,
+          "line": 73,
+        },
+        Object {
+          "hit": 0,
+          "line": 74,
+        },
+        Object {
+          "hit": 1,
+          "line": 75,
+        },
+        Object {
+          "hit": 1,
+          "line": 76,
+        },
+        Object {
+          "hit": 1,
+          "line": 77,
+        },
+        Object {
+          "hit": 1,
+          "line": 78,
+        },
+        Object {
+          "hit": 1,
+          "line": 79,
+        },
+        Object {
+          "hit": 1,
+          "line": 80,
+        },
+        Object {
+          "hit": 0,
+          "line": 81,
+        },
+        Object {
+          "hit": 0,
+          "line": 82,
+        },
+        Object {
+          "hit": 1,
+          "line": 85,
+        },
+        Object {
+          "hit": 1,
+          "line": 86,
+        },
+        Object {
+          "hit": 0,
+          "line": 87,
+        },
+        Object {
+          "hit": 0,
+          "line": 88,
+        },
+        Object {
+          "hit": 2,
+          "line": 89,
+        },
+        Object {
+          "hit": 1,
+          "line": 90,
+        },
+        Object {
+          "hit": 1,
+          "line": 91,
+        },
+        Object {
+          "hit": 1,
+          "line": 92,
+        },
+        Object {
+          "hit": 1,
+          "line": 93,
+        },
+        Object {
+          "hit": 1,
+          "line": 94,
+        },
+        Object {
+          "hit": 1,
+          "line": 95,
+        },
+        Object {
+          "hit": 1,
+          "line": 98,
+        },
+        Object {
+          "hit": 1,
+          "line": 99,
+        },
+        Object {
+          "hit": 0,
+          "line": 100,
+        },
+        Object {
+          "hit": 0,
+          "line": 101,
+        },
+        Object {
+          "hit": 0,
+          "line": 102,
+        },
+        Object {
+          "hit": 1,
+          "line": 104,
+        },
+        Object {
+          "hit": 1,
+          "line": 105,
+        },
+        Object {
+          "hit": 1,
+          "line": 106,
+        },
+        Object {
+          "hit": 1,
+          "line": 109,
+        },
+        Object {
+          "hit": 1,
+          "line": 110,
+        },
+        Object {
+          "hit": 1,
+          "line": 111,
+        },
+        Object {
+          "hit": 0,
+          "line": 112,
+        },
+        Object {
+          "hit": 0,
+          "line": 113,
+        },
+        Object {
+          "hit": 1,
+          "line": 114,
+        },
+        Object {
+          "hit": 1,
+          "line": 115,
+        },
+        Object {
+          "hit": 1,
+          "line": 116,
+        },
+        Object {
+          "hit": 0,
+          "line": 117,
+        },
+        Object {
+          "hit": 0,
+          "line": 118,
+        },
+        Object {
+          "hit": 1,
+          "line": 119,
+        },
+        Object {
+          "hit": 1,
+          "line": 120,
+        },
+        Object {
+          "hit": 1,
+          "line": 121,
+        },
+        Object {
+          "hit": 1,
+          "line": 122,
+        },
+        Object {
+          "hit": 1,
+          "line": 123,
+        },
+        Object {
+          "hit": 1,
+          "line": 124,
+        },
+        Object {
+          "hit": 0,
+          "line": 125,
+        },
+        Object {
+          "hit": 0,
+          "line": 126,
+        },
+        Object {
+          "hit": 1,
+          "line": 128,
+        },
+        Object {
+          "hit": 1,
+          "line": 129,
+        },
+        Object {
+          "hit": 0,
+          "line": 130,
+        },
+        Object {
+          "hit": 0,
+          "line": 131,
+        },
+        Object {
+          "hit": 2,
+          "line": 133,
+        },
+        Object {
+          "hit": 1,
+          "line": 134,
+        },
+        Object {
+          "hit": 1,
+          "line": 135,
+        },
+        Object {
+          "hit": 1,
+          "line": 136,
+        },
+        Object {
+          "hit": 1,
+          "line": 138,
+        },
+        Object {
+          "hit": 1,
+          "line": 139,
+        },
+        Object {
+          "hit": 1,
+          "line": 140,
+        },
+        Object {
+          "hit": 1,
+          "line": 141,
+        },
+        Object {
+          "hit": 1,
+          "line": 142,
+        },
+        Object {
+          "hit": 2,
+          "line": 143,
+        },
+        Object {
+          "hit": 1,
+          "line": 144,
+        },
+        Object {
+          "hit": 1,
+          "line": 145,
+        },
+        Object {
+          "hit": 2,
+          "line": 146,
+        },
+        Object {
+          "hit": 1,
+          "line": 147,
+        },
+        Object {
+          "hit": 1,
+          "line": 148,
+        },
+        Object {
+          "hit": 1,
+          "line": 150,
+        },
+        Object {
+          "hit": 1,
+          "line": 153,
+        },
+        Object {
+          "hit": 1,
+          "line": 154,
+        },
+        Object {
+          "hit": 1,
+          "line": 155,
+        },
+        Object {
+          "hit": 0,
+          "line": 156,
+        },
+        Object {
+          "hit": 0,
+          "line": 157,
+        },
+        Object {
+          "hit": 1,
+          "line": 158,
+        },
+        Object {
+          "hit": 1,
+          "line": 159,
+        },
+        Object {
+          "hit": 1,
+          "line": 160,
+        },
+        Object {
+          "hit": 0,
+          "line": 161,
+        },
+        Object {
+          "hit": 0,
+          "line": 162,
+        },
+        Object {
+          "hit": 1,
+          "line": 164,
+        },
+        Object {
+          "hit": 1,
+          "line": 165,
+        },
+        Object {
+          "hit": 0,
+          "line": 166,
+        },
+        Object {
+          "hit": 0,
+          "line": 167,
+        },
+        Object {
+          "hit": 1,
+          "line": 169,
+        },
+        Object {
+          "hit": 1,
+          "line": 170,
+        },
+        Object {
+          "hit": 0,
+          "line": 171,
+        },
+        Object {
+          "hit": 0,
+          "line": 172,
+        },
+        Object {
+          "hit": 1,
+          "line": 174,
+        },
+        Object {
+          "hit": 1,
+          "line": 175,
+        },
+        Object {
+          "hit": 0,
+          "line": 176,
+        },
+        Object {
+          "hit": 0,
+          "line": 177,
+        },
+        Object {
+          "hit": 1,
+          "line": 179,
+        },
+        Object {
+          "hit": 1,
+          "line": 180,
+        },
+        Object {
+          "hit": 1,
+          "line": 181,
+        },
+        Object {
+          "hit": 1,
+          "line": 182,
+        },
+        Object {
+          "hit": 1,
+          "line": 183,
+        },
+        Object {
+          "hit": 2,
+          "line": 184,
+        },
+        Object {
+          "hit": 1,
+          "line": 185,
+        },
+        Object {
+          "hit": 1,
+          "line": 186,
+        },
+        Object {
+          "hit": 2,
+          "line": 187,
+        },
+        Object {
+          "hit": 1,
+          "line": 188,
+        },
+        Object {
+          "hit": 1,
+          "line": 189,
+        },
+        Object {
+          "hit": 1,
+          "line": 191,
+        },
+        Object {
+          "hit": 1,
+          "line": 194,
+        },
+        Object {
+          "hit": 1,
+          "line": 195,
+        },
+        Object {
+          "hit": 1,
+          "line": 196,
+        },
+        Object {
+          "hit": 0,
+          "line": 197,
+        },
+        Object {
+          "hit": 0,
+          "line": 198,
+        },
+        Object {
+          "hit": 1,
+          "line": 199,
+        },
+        Object {
+          "hit": 1,
+          "line": 200,
+        },
+        Object {
+          "hit": 1,
+          "line": 201,
+        },
+        Object {
+          "hit": 1,
+          "line": 202,
+        },
+        Object {
+          "hit": 1,
+          "line": 203,
+        },
+        Object {
+          "hit": 0,
+          "line": 204,
+        },
+        Object {
+          "hit": 0,
+          "line": 205,
+        },
+        Object {
+          "hit": 1,
+          "line": 207,
+        },
+        Object {
+          "hit": 1,
+          "line": 208,
+        },
+        Object {
+          "hit": 0,
+          "line": 209,
+        },
+        Object {
+          "hit": 0,
+          "line": 210,
+        },
+        Object {
+          "hit": 1,
+          "line": 212,
+        },
+        Object {
+          "hit": 1,
+          "line": 213,
+        },
+        Object {
+          "hit": 0,
+          "line": 214,
+        },
+        Object {
+          "hit": 0,
+          "line": 215,
+        },
+        Object {
+          "hit": 1,
+          "line": 217,
+        },
+        Object {
+          "hit": 1,
+          "line": 218,
+        },
+        Object {
+          "hit": 0,
+          "line": 219,
+        },
+        Object {
+          "hit": 0,
+          "line": 220,
+        },
+        Object {
+          "hit": 2,
+          "line": 222,
+        },
+        Object {
+          "hit": 1,
+          "line": 223,
+        },
+        Object {
+          "hit": 1,
+          "line": 224,
+        },
+        Object {
+          "hit": 1,
+          "line": 225,
+        },
+        Object {
+          "hit": 1,
+          "line": 226,
+        },
+        Object {
+          "hit": 0,
+          "line": 227,
+        },
+        Object {
+          "hit": 0,
+          "line": 228,
+        },
+        Object {
+          "hit": 0,
+          "line": 229,
+        },
+        Object {
+          "hit": 1,
+          "line": 231,
+        },
+        Object {
+          "hit": 1,
+          "line": 232,
+        },
+        Object {
+          "hit": 1,
+          "line": 233,
+        },
+        Object {
+          "hit": 1,
+          "line": 234,
+        },
+        Object {
+          "hit": 1,
+          "line": 235,
+        },
+        Object {
+          "hit": 1,
+          "line": 236,
+        },
+        Object {
+          "hit": 0,
+          "line": 237,
+        },
+        Object {
+          "hit": 0,
+          "line": 238,
+        },
+        Object {
+          "hit": 1,
+          "line": 239,
+        },
+        Object {
+          "hit": 1,
+          "line": 240,
+        },
+        Object {
+          "hit": 1,
+          "line": 241,
+        },
+        Object {
+          "hit": 1,
+          "line": 243,
+        },
+        Object {
+          "hit": 1,
+          "line": 246,
+        },
+        Object {
+          "hit": 1,
+          "line": 247,
+        },
+        Object {
+          "hit": 0,
+          "line": 248,
+        },
+        Object {
+          "hit": 0,
+          "line": 249,
+        },
+        Object {
+          "hit": 0,
+          "line": 252,
+        },
+        Object {
+          "hit": 0,
+          "line": 253,
+        },
+        Object {
+          "hit": 0,
+          "line": 254,
+        },
+        Object {
+          "hit": 0,
+          "line": 255,
+        },
+        Object {
+          "hit": 0,
+          "line": 259,
+        },
+        Object {
+          "hit": 0,
+          "line": 260,
+        },
+        Object {
+          "hit": 0,
+          "line": 261,
+        },
+        Object {
+          "hit": 0,
+          "line": 262,
+        },
+        Object {
+          "hit": 0,
+          "line": 263,
+        },
+        Object {
+          "hit": 0,
+          "line": 264,
+        },
+        Object {
+          "hit": 0,
+          "line": 265,
+        },
+        Object {
+          "hit": 0,
+          "line": 266,
+        },
+        Object {
+          "hit": 0,
+          "line": 267,
+        },
+        Object {
+          "hit": 0,
+          "line": 268,
+        },
+        Object {
+          "hit": 0,
+          "line": 269,
+        },
+        Object {
+          "hit": 0,
+          "line": 270,
+        },
+        Object {
+          "hit": 0,
+          "line": 271,
+        },
+        Object {
+          "hit": 0,
+          "line": 272,
+        },
+        Object {
+          "hit": 0,
+          "line": 273,
+        },
+        Object {
+          "hit": 0,
+          "line": 274,
+        },
+        Object {
+          "hit": 0,
+          "line": 275,
+        },
+        Object {
+          "hit": 0,
+          "line": 276,
+        },
+        Object {
+          "hit": 0,
+          "line": 277,
+        },
+        Object {
+          "hit": 0,
+          "line": 278,
+        },
+        Object {
+          "hit": 0,
+          "line": 279,
+        },
+        Object {
+          "hit": 0,
+          "line": 280,
+        },
+        Object {
+          "hit": 0,
+          "line": 281,
+        },
+        Object {
+          "hit": 0,
+          "line": 282,
+        },
+        Object {
+          "hit": 0,
+          "line": 283,
+        },
+        Object {
+          "hit": 0,
+          "line": 284,
+        },
+        Object {
+          "hit": 0,
+          "line": 285,
+        },
+        Object {
+          "hit": 0,
+          "line": 286,
+        },
+        Object {
+          "hit": 0,
+          "line": 287,
+        },
+        Object {
+          "hit": 0,
+          "line": 288,
+        },
+        Object {
+          "hit": 0,
+          "line": 289,
+        },
+        Object {
+          "hit": 0,
+          "line": 290,
+        },
+        Object {
+          "hit": 0,
+          "line": 291,
+        },
+        Object {
+          "hit": 0,
+          "line": 292,
+        },
+        Object {
+          "hit": 0,
+          "line": 293,
+        },
+        Object {
+          "hit": 0,
+          "line": 294,
+        },
+        Object {
+          "hit": 0,
+          "line": 295,
+        },
+        Object {
+          "hit": 0,
+          "line": 296,
+        },
+        Object {
+          "hit": 0,
+          "line": 297,
+        },
+        Object {
+          "hit": 0,
+          "line": 298,
+        },
+        Object {
+          "hit": 0,
+          "line": 299,
+        },
+        Object {
+          "hit": 0,
+          "line": 300,
+        },
+        Object {
+          "hit": 0,
+          "line": 301,
+        },
+        Object {
+          "hit": 0,
+          "line": 302,
+        },
+        Object {
+          "hit": 0,
+          "line": 303,
+        },
+      ],
+      "found": 247,
+      "hit": 115,
+    },
+    "title": "bitrot.go",
+  },
+  Object {
+    "file": "checksum.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 16,
+        },
+        Object {
+          "hit": 1,
+          "line": 17,
+        },
+        Object {
+          "hit": 1,
+          "line": 18,
+        },
+        Object {
+          "hit": 0,
+          "line": 19,
+        },
+        Object {
+          "hit": 0,
+          "line": 20,
+        },
+        Object {
+          "hit": 1,
+          "line": 21,
+        },
+        Object {
+          "hit": 1,
+          "line": 22,
+        },
+        Object {
+          "hit": 1,
+          "line": 23,
+        },
+        Object {
+          "hit": 1,
+          "line": 24,
+        },
+        Object {
+          "hit": 1,
+          "line": 25,
+        },
+        Object {
+          "hit": 1,
+          "line": 28,
+        },
+        Object {
+          "hit": 1,
+          "line": 29,
+        },
+        Object {
+          "hit": 1,
+          "line": 30,
+        },
+        Object {
+          "hit": 0,
+          "line": 31,
+        },
+        Object {
+          "hit": 0,
+          "line": 32,
+        },
+        Object {
+          "hit": 1,
+          "line": 33,
+        },
+        Object {
+          "hit": 1,
+          "line": 34,
+        },
+        Object {
+          "hit": 0,
+          "line": 35,
+        },
+        Object {
+          "hit": 0,
+          "line": 36,
+        },
+        Object {
+          "hit": 1,
+          "line": 37,
+        },
+        Object {
+          "hit": 1,
+          "line": 40,
+        },
+        Object {
+          "hit": 2,
+          "line": 41,
+        },
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 44,
+        },
+        Object {
+          "hit": 0,
+          "line": 45,
+        },
+        Object {
+          "hit": 0,
+          "line": 46,
+        },
+        Object {
+          "hit": 1,
+          "line": 47,
+        },
+        Object {
+          "hit": 2,
+          "line": 48,
+        },
+        Object {
+          "hit": 1,
+          "line": 49,
+        },
+        Object {
+          "hit": 1,
+          "line": 50,
+        },
+      ],
+      "found": 37,
+      "hit": 23,
+    },
+    "title": "checksum.go",
+  },
+  Object {
+    "file": "comparison_report.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 12,
+        },
+        Object {
+          "hit": 1,
+          "line": 13,
+        },
+        Object {
+          "hit": 1,
+          "line": 14,
+        },
+        Object {
+          "hit": 1,
+          "line": 15,
+        },
+        Object {
+          "hit": 1,
+          "line": 17,
+        },
+        Object {
+          "hit": 1,
+          "line": 18,
+        },
+        Object {
+          "hit": 1,
+          "line": 19,
+        },
+        Object {
+          "hit": 1,
+          "line": 21,
+        },
+        Object {
+          "hit": 1,
+          "line": 22,
+        },
+        Object {
+          "hit": 2,
+          "line": 23,
+        },
+        Object {
+          "hit": 1,
+          "line": 24,
+        },
+        Object {
+          "hit": 2,
+          "line": 25,
+        },
+        Object {
+          "hit": 1,
+          "line": 26,
+        },
+        Object {
+          "hit": 1,
+          "line": 27,
+        },
+        Object {
+          "hit": 1,
+          "line": 28,
+        },
+        Object {
+          "hit": 1,
+          "line": 29,
+        },
+        Object {
+          "hit": 1,
+          "line": 30,
+        },
+        Object {
+          "hit": 1,
+          "line": 31,
+        },
+        Object {
+          "hit": 1,
+          "line": 32,
+        },
+        Object {
+          "hit": 1,
+          "line": 33,
+        },
+        Object {
+          "hit": 1,
+          "line": 34,
+        },
+        Object {
+          "hit": 1,
+          "line": 35,
+        },
+        Object {
+          "hit": 1,
+          "line": 36,
+        },
+        Object {
+          "hit": 1,
+          "line": 37,
+        },
+        Object {
+          "hit": 1,
+          "line": 38,
+        },
+        Object {
+          "hit": 1,
+          "line": 39,
+        },
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 44,
+        },
+        Object {
+          "hit": 1,
+          "line": 45,
+        },
+        Object {
+          "hit": 1,
+          "line": 46,
+        },
+        Object {
+          "hit": 1,
+          "line": 47,
+        },
+        Object {
+          "hit": 1,
+          "line": 48,
+        },
+        Object {
+          "hit": 1,
+          "line": 49,
+        },
+        Object {
+          "hit": 1,
+          "line": 51,
+        },
+        Object {
+          "hit": 1,
+          "line": 52,
+        },
+        Object {
+          "hit": 1,
+          "line": 53,
+        },
+        Object {
+          "hit": 1,
+          "line": 54,
+        },
+        Object {
+          "hit": 1,
+          "line": 56,
+        },
+        Object {
+          "hit": 1,
+          "line": 57,
+        },
+        Object {
+          "hit": 2,
+          "line": 58,
+        },
+        Object {
+          "hit": 1,
+          "line": 59,
+        },
+        Object {
+          "hit": 1,
+          "line": 60,
+        },
+        Object {
+          "hit": 1,
+          "line": 61,
+        },
+        Object {
+          "hit": 1,
+          "line": 64,
+        },
+        Object {
+          "hit": 1,
+          "line": 65,
+        },
+        Object {
+          "hit": 1,
+          "line": 66,
+        },
+        Object {
+          "hit": 1,
+          "line": 68,
+        },
+        Object {
+          "hit": 1,
+          "line": 69,
+        },
+        Object {
+          "hit": 1,
+          "line": 70,
+        },
+        Object {
+          "hit": 1,
+          "line": 71,
+        },
+        Object {
+          "hit": 1,
+          "line": 72,
+        },
+        Object {
+          "hit": 2,
+          "line": 73,
+        },
+        Object {
+          "hit": 1,
+          "line": 74,
+        },
+        Object {
+          "hit": 1,
+          "line": 75,
+        },
+        Object {
+          "hit": 1,
+          "line": 76,
+        },
+      ],
+      "found": 60,
+      "hit": 56,
+    },
+    "title": "comparison_report.go",
+  },
+  Object {
+    "file": "config.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 44,
+        },
+        Object {
+          "hit": 0,
+          "line": 45,
+        },
+        Object {
+          "hit": 0,
+          "line": 46,
+        },
+        Object {
+          "hit": 0,
+          "line": 47,
+        },
+        Object {
+          "hit": 0,
+          "line": 48,
+        },
+        Object {
+          "hit": 1,
+          "line": 51,
+        },
+        Object {
+          "hit": 1,
+          "line": 52,
+        },
+        Object {
+          "hit": 1,
+          "line": 53,
+        },
+        Object {
+          "hit": 1,
+          "line": 54,
+        },
+        Object {
+          "hit": 1,
+          "line": 57,
+        },
+        Object {
+          "hit": 1,
+          "line": 58,
+        },
+        Object {
+          "hit": 2,
+          "line": 59,
+        },
+        Object {
+          "hit": 2,
+          "line": 60,
+        },
+        Object {
+          "hit": 1,
+          "line": 61,
+        },
+        Object {
+          "hit": 1,
+          "line": 62,
+        },
+        Object {
+          "hit": 1,
+          "line": 64,
+        },
+        Object {
+          "hit": 1,
+          "line": 67,
+        },
+        Object {
+          "hit": 2,
+          "line": 68,
+        },
+        Object {
+          "hit": 1,
+          "line": 69,
+        },
+        Object {
+          "hit": 1,
+          "line": 70,
+        },
+        Object {
+          "hit": 1,
+          "line": 71,
+        },
+      ],
+      "found": 28,
+      "hit": 19,
+    },
+    "title": "config.go",
+  },
+  Object {
+    "file": "manifest.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 26,
+        },
+        Object {
+          "hit": 1,
+          "line": 27,
+        },
+        Object {
+          "hit": 1,
+          "line": 28,
+        },
+        Object {
+          "hit": 0,
+          "line": 29,
+        },
+        Object {
+          "hit": 0,
+          "line": 30,
+        },
+        Object {
+          "hit": 1,
+          "line": 32,
+        },
+        Object {
+          "hit": 1,
+          "line": 33,
+        },
+        Object {
+          "hit": 1,
+          "line": 34,
+        },
+        Object {
+          "hit": 1,
+          "line": 35,
+        },
+        Object {
+          "hit": 1,
+          "line": 36,
+        },
+        Object {
+          "hit": 1,
+          "line": 41,
+        },
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 44,
+        },
+        Object {
+          "hit": 1,
+          "line": 45,
+        },
+        Object {
+          "hit": 0,
+          "line": 46,
+        },
+        Object {
+          "hit": 0,
+          "line": 47,
+        },
+        Object {
+          "hit": 1,
+          "line": 48,
+        },
+        Object {
+          "hit": 1,
+          "line": 49,
+        },
+        Object {
+          "hit": 0,
+          "line": 50,
+        },
+        Object {
+          "hit": 0,
+          "line": 51,
+        },
+        Object {
+          "hit": 1,
+          "line": 52,
+        },
+        Object {
+          "hit": 0,
+          "line": 55,
+        },
+        Object {
+          "hit": 0,
+          "line": 56,
+        },
+        Object {
+          "hit": 0,
+          "line": 57,
+        },
+        Object {
+          "hit": 0,
+          "line": 58,
+        },
+        Object {
+          "hit": 1,
+          "line": 60,
+        },
+        Object {
+          "hit": 1,
+          "line": 61,
+        },
+        Object {
+          "hit": 2,
+          "line": 62,
+        },
+        Object {
+          "hit": 1,
+          "line": 63,
+        },
+        Object {
+          "hit": 0,
+          "line": 64,
+        },
+        Object {
+          "hit": 0,
+          "line": 65,
+        },
+        Object {
+          "hit": 2,
+          "line": 67,
+        },
+        Object {
+          "hit": 2,
+          "line": 68,
+        },
+        Object {
+          "hit": 1,
+          "line": 69,
+        },
+        Object {
+          "hit": 1,
+          "line": 70,
+        },
+        Object {
+          "hit": 1,
+          "line": 71,
+        },
+        Object {
+          "hit": 1,
+          "line": 72,
+        },
+        Object {
+          "hit": 2,
+          "line": 75,
+        },
+        Object {
+          "hit": 1,
+          "line": 76,
+        },
+        Object {
+          "hit": 1,
+          "line": 77,
+        },
+        Object {
+          "hit": 1,
+          "line": 78,
+        },
+        Object {
+          "hit": 0,
+          "line": 79,
+        },
+        Object {
+          "hit": 0,
+          "line": 80,
+        },
+        Object {
+          "hit": 1,
+          "line": 82,
+        },
+        Object {
+          "hit": 1,
+          "line": 83,
+        },
+        Object {
+          "hit": 1,
+          "line": 84,
+        },
+        Object {
+          "hit": 0,
+          "line": 85,
+        },
+        Object {
+          "hit": 0,
+          "line": 86,
+        },
+        Object {
+          "hit": 1,
+          "line": 87,
+        },
+        Object {
+          "hit": 1,
+          "line": 88,
+        },
+        Object {
+          "hit": 1,
+          "line": 89,
+        },
+        Object {
+          "hit": 1,
+          "line": 90,
+        },
+        Object {
+          "hit": 1,
+          "line": 93,
+        },
+        Object {
+          "hit": 1,
+          "line": 95,
+        },
+        Object {
+          "hit": 0,
+          "line": 96,
+        },
+        Object {
+          "hit": 0,
+          "line": 97,
+        },
+        Object {
+          "hit": 1,
+          "line": 98,
+        },
+      ],
+      "found": 69,
+      "hit": 40,
+    },
+    "title": "manifest.go",
+  },
+  Object {
+    "file": "manifest_comparison.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 26,
+        },
+        Object {
+          "hit": 1,
+          "line": 27,
+        },
+        Object {
+          "hit": 1,
+          "line": 28,
+        },
+        Object {
+          "hit": 1,
+          "line": 29,
+        },
+        Object {
+          "hit": 1,
+          "line": 30,
+        },
+        Object {
+          "hit": 1,
+          "line": 32,
+        },
+        Object {
+          "hit": 1,
+          "line": 33,
+        },
+        Object {
+          "hit": 1,
+          "line": 34,
+        },
+        Object {
+          "hit": 1,
+          "line": 36,
+        },
+        Object {
+          "hit": 1,
+          "line": 37,
+        },
+        Object {
+          "hit": 1,
+          "line": 38,
+        },
+        Object {
+          "hit": 1,
+          "line": 39,
+        },
+        Object {
+          "hit": 1,
+          "line": 40,
+        },
+        Object {
+          "hit": 1,
+          "line": 41,
+        },
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 45,
+        },
+        Object {
+          "hit": 1,
+          "line": 46,
+        },
+        Object {
+          "hit": 2,
+          "line": 47,
+        },
+        Object {
+          "hit": 1,
+          "line": 48,
+        },
+        Object {
+          "hit": 1,
+          "line": 49,
+        },
+        Object {
+          "hit": 2,
+          "line": 52,
+        },
+        Object {
+          "hit": 1,
+          "line": 53,
+        },
+        Object {
+          "hit": 2,
+          "line": 54,
+        },
+        Object {
+          "hit": 1,
+          "line": 55,
+        },
+        Object {
+          "hit": 1,
+          "line": 56,
+        },
+        Object {
+          "hit": 2,
+          "line": 60,
+        },
+        Object {
+          "hit": 1,
+          "line": 61,
+        },
+        Object {
+          "hit": 2,
+          "line": 62,
+        },
+        Object {
+          "hit": 1,
+          "line": 63,
+        },
+        Object {
+          "hit": 2,
+          "line": 67,
+        },
+        Object {
+          "hit": 1,
+          "line": 68,
+        },
+        Object {
+          "hit": 1,
+          "line": 72,
+        },
+        Object {
+          "hit": 1,
+          "line": 75,
+        },
+        Object {
+          "hit": 1,
+          "line": 78,
+        },
+        Object {
+          "hit": 1,
+          "line": 79,
+        },
+        Object {
+          "hit": 2,
+          "line": 80,
+        },
+        Object {
+          "hit": 1,
+          "line": 81,
+        },
+        Object {
+          "hit": 1,
+          "line": 82,
+        },
+        Object {
+          "hit": 2,
+          "line": 84,
+        },
+        Object {
+          "hit": 1,
+          "line": 85,
+        },
+        Object {
+          "hit": 2,
+          "line": 86,
+        },
+        Object {
+          "hit": 2,
+          "line": 87,
+        },
+        Object {
+          "hit": 1,
+          "line": 88,
+        },
+        Object {
+          "hit": 1,
+          "line": 89,
+        },
+        Object {
+          "hit": 2,
+          "line": 90,
+        },
+        Object {
+          "hit": 1,
+          "line": 91,
+        },
+        Object {
+          "hit": 1,
+          "line": 92,
+        },
+        Object {
+          "hit": 1,
+          "line": 93,
+        },
+        Object {
+          "hit": 1,
+          "line": 96,
+        },
+        Object {
+          "hit": 1,
+          "line": 99,
+        },
+        Object {
+          "hit": 1,
+          "line": 100,
+        },
+        Object {
+          "hit": 2,
+          "line": 101,
+        },
+        Object {
+          "hit": 1,
+          "line": 102,
+        },
+        Object {
+          "hit": 1,
+          "line": 103,
+        },
+        Object {
+          "hit": 1,
+          "line": 105,
+        },
+        Object {
+          "hit": 1,
+          "line": 106,
+        },
+        Object {
+          "hit": 1,
+          "line": 107,
+        },
+        Object {
+          "hit": 2,
+          "line": 108,
+        },
+        Object {
+          "hit": 2,
+          "line": 109,
+        },
+        Object {
+          "hit": 1,
+          "line": 110,
+        },
+        Object {
+          "hit": 1,
+          "line": 111,
+        },
+        Object {
+          "hit": 1,
+          "line": 115,
+        },
+        Object {
+          "hit": 1,
+          "line": 118,
+        },
+        Object {
+          "hit": 2,
+          "line": 119,
+        },
+        Object {
+          "hit": 2,
+          "line": 120,
+        },
+        Object {
+          "hit": 1,
+          "line": 121,
+        },
+        Object {
+          "hit": 1,
+          "line": 122,
+        },
+        Object {
+          "hit": 1,
+          "line": 124,
+        },
+      ],
+      "found": 85,
+      "hit": 69,
+    },
+    "title": "manifest_comparison.go",
+  },
+  Object {
+    "file": "manifest_storage.go",
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 44,
+        },
+        Object {
+          "hit": 1,
+          "line": 46,
+        },
+        Object {
+          "hit": 1,
+          "line": 47,
+        },
+        Object {
+          "hit": 1,
+          "line": 48,
+        },
+        Object {
+          "hit": 2,
+          "line": 49,
+        },
+        Object {
+          "hit": 1,
+          "line": 50,
+        },
+        Object {
+          "hit": 1,
+          "line": 51,
+        },
+        Object {
+          "hit": 0,
+          "line": 52,
+        },
+        Object {
+          "hit": 0,
+          "line": 53,
+        },
+        Object {
+          "hit": 1,
+          "line": 55,
+        },
+        Object {
+          "hit": 1,
+          "line": 56,
+        },
+        Object {
+          "hit": 1,
+          "line": 57,
+        },
+        Object {
+          "hit": 1,
+          "line": 58,
+        },
+        Object {
+          "hit": 1,
+          "line": 61,
+        },
+        Object {
+          "hit": 1,
+          "line": 64,
+        },
+        Object {
+          "hit": 1,
+          "line": 65,
+        },
+        Object {
+          "hit": 1,
+          "line": 66,
+        },
+        Object {
+          "hit": 0,
+          "line": 67,
+        },
+        Object {
+          "hit": 0,
+          "line": 68,
+        },
+        Object {
+          "hit": 1,
+          "line": 70,
+        },
+        Object {
+          "hit": 1,
+          "line": 71,
+        },
+        Object {
+          "hit": 0,
+          "line": 72,
+        },
+        Object {
+          "hit": 0,
+          "line": 73,
+        },
+        Object {
+          "hit": 1,
+          "line": 74,
+        },
+        Object {
+          "hit": 1,
+          "line": 75,
+        },
+        Object {
+          "hit": 1,
+          "line": 76,
+        },
+        Object {
+          "hit": 2,
+          "line": 77,
+        },
+        Object {
+          "hit": 1,
+          "line": 78,
+        },
+        Object {
+          "hit": 1,
+          "line": 79,
+        },
+        Object {
+          "hit": 0,
+          "line": 80,
+        },
+        Object {
+          "hit": 0,
+          "line": 81,
+        },
+        Object {
+          "hit": 0,
+          "line": 82,
+        },
+        Object {
+          "hit": 0,
+          "line": 83,
+        },
+        Object {
+          "hit": 0,
+          "line": 84,
+        },
+        Object {
+          "hit": 1,
+          "line": 86,
+        },
+        Object {
+          "hit": 1,
+          "line": 89,
+        },
+        Object {
+          "hit": 1,
+          "line": 90,
+        },
+        Object {
+          "hit": 1,
+          "line": 91,
+        },
+        Object {
+          "hit": 0,
+          "line": 92,
+        },
+        Object {
+          "hit": 0,
+          "line": 93,
+        },
+        Object {
+          "hit": 1,
+          "line": 95,
+        },
+        Object {
+          "hit": 1,
+          "line": 96,
+        },
+        Object {
+          "hit": 0,
+          "line": 97,
+        },
+        Object {
+          "hit": 0,
+          "line": 98,
+        },
+        Object {
+          "hit": 1,
+          "line": 99,
+        },
+        Object {
+          "hit": 1,
+          "line": 100,
+        },
+        Object {
+          "hit": 2,
+          "line": 101,
+        },
+        Object {
+          "hit": 1,
+          "line": 102,
+        },
+        Object {
+          "hit": 1,
+          "line": 103,
+        },
+        Object {
+          "hit": 1,
+          "line": 104,
+        },
+        Object {
+          "hit": 1,
+          "line": 107,
+        },
+        Object {
+          "hit": 1,
+          "line": 108,
+        },
+        Object {
+          "hit": 1,
+          "line": 109,
+        },
+        Object {
+          "hit": 0,
+          "line": 110,
+        },
+        Object {
+          "hit": 0,
+          "line": 111,
+        },
+        Object {
+          "hit": 1,
+          "line": 113,
+        },
+        Object {
+          "hit": 1,
+          "line": 114,
+        },
+        Object {
+          "hit": 1,
+          "line": 115,
+        },
+        Object {
+          "hit": 0,
+          "line": 116,
+        },
+        Object {
+          "hit": 0,
+          "line": 117,
+        },
+        Object {
+          "hit": 1,
+          "line": 118,
+        },
+        Object {
+          "hit": 1,
+          "line": 121,
+        },
+        Object {
+          "hit": 1,
+          "line": 122,
+        },
+        Object {
+          "hit": 1,
+          "line": 123,
+        },
+        Object {
+          "hit": 1,
+          "line": 124,
+        },
+        Object {
+          "hit": 0,
+          "line": 125,
+        },
+        Object {
+          "hit": 0,
+          "line": 126,
+        },
+        Object {
+          "hit": 1,
+          "line": 127,
+        },
+        Object {
+          "hit": 1,
+          "line": 128,
+        },
+        Object {
+          "hit": 0,
+          "line": 129,
+        },
+        Object {
+          "hit": 0,
+          "line": 130,
+        },
+        Object {
+          "hit": 1,
+          "line": 131,
+        },
+        Object {
+          "hit": 1,
+          "line": 134,
+        },
+        Object {
+          "hit": 1,
+          "line": 135,
+        },
+        Object {
+          "hit": 1,
+          "line": 136,
+        },
+        Object {
+          "hit": 1,
+          "line": 137,
+        },
+        Object {
+          "hit": 1,
+          "line": 138,
+        },
+        Object {
+          "hit": 0,
+          "line": 139,
+        },
+        Object {
+          "hit": 0,
+          "line": 140,
+        },
+        Object {
+          "hit": 1,
+          "line": 143,
+        },
+        Object {
+          "hit": 2,
+          "line": 144,
+        },
+        Object {
+          "hit": 1,
+          "line": 145,
+        },
+        Object {
+          "hit": 1,
+          "line": 146,
+        },
+        Object {
+          "hit": 1,
+          "line": 147,
+        },
+        Object {
+          "hit": 1,
+          "line": 148,
+        },
+        Object {
+          "hit": 0,
+          "line": 149,
+        },
+        Object {
+          "hit": 0,
+          "line": 150,
+        },
+        Object {
+          "hit": 1,
+          "line": 151,
+        },
+        Object {
+          "hit": 1,
+          "line": 152,
+        },
+        Object {
+          "hit": 1,
+          "line": 153,
+        },
+        Object {
+          "hit": 1,
+          "line": 154,
+        },
+        Object {
+          "hit": 1,
+          "line": 155,
+        },
+        Object {
+          "hit": 0,
+          "line": 156,
+        },
+        Object {
+          "hit": 0,
+          "line": 157,
+        },
+        Object {
+          "hit": 1,
+          "line": 158,
+        },
+        Object {
+          "hit": 0,
+          "line": 159,
+        },
+        Object {
+          "hit": 0,
+          "line": 160,
+        },
+        Object {
+          "hit": 1,
+          "line": 163,
+        },
+        Object {
+          "hit": 1,
+          "line": 166,
+        },
+        Object {
+          "hit": 1,
+          "line": 167,
+        },
+        Object {
+          "hit": 1,
+          "line": 168,
+        },
+        Object {
+          "hit": 1,
+          "line": 169,
+        },
+        Object {
+          "hit": 1,
+          "line": 170,
+        },
+        Object {
+          "hit": 1,
+          "line": 172,
+        },
+        Object {
+          "hit": 1,
+          "line": 173,
+        },
+        Object {
+          "hit": 1,
+          "line": 174,
+        },
+        Object {
+          "hit": 1,
+          "line": 175,
+        },
+        Object {
+          "hit": 1,
+          "line": 176,
+        },
+        Object {
+          "hit": 1,
+          "line": 177,
+        },
+        Object {
+          "hit": 1,
+          "line": 178,
+        },
+        Object {
+          "hit": 1,
+          "line": 181,
+        },
+        Object {
+          "hit": 1,
+          "line": 182,
+        },
+        Object {
+          "hit": 1,
+          "line": 183,
+        },
+        Object {
+          "hit": 1,
+          "line": 184,
+        },
+        Object {
+          "hit": 1,
+          "line": 185,
+        },
+        Object {
+          "hit": 1,
+          "line": 186,
+        },
+      ],
+      "found": 136,
+      "hit": 87,
+    },
+    "title": "manifest_storage.go",
+  },
+]
+`;

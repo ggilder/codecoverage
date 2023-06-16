@@ -1,7 +1,6 @@
 import * as core from '@actions/core'
 import * as diff from './diff'
 import * as github from '@actions/github'
-import * as path from 'path'
 import {
   CoverageFile,
   LineRange,
@@ -103,14 +102,12 @@ export class GithubUtil {
 
   buildAnnotations(
     coverageFiles: CoverageFile[],
-    pullRequestFiles: PullRequestFiles,
-    workspacePath: string
+    pullRequestFiles: PullRequestFiles
   ): Annotations[] {
     const annotations: Annotations[] = []
     for (const current of coverageFiles) {
-      const relPath = path.relative(workspacePath, current.fileName)
       // Only annotate relevant files
-      const prFileRanges = pullRequestFiles[relPath]
+      const prFileRanges = pullRequestFiles[current.fileName]
       if (prFileRanges) {
         const coverageRanges = coalesceLineNumbers(current.missingLineNumbers)
         const uncoveredRanges = intersectLineRanges(
@@ -125,7 +122,7 @@ export class GithubUtil {
               ? 'These lines are not covered by a test'
               : 'This line is not covered by a test'
           annotations.push({
-            path: relPath,
+            path: current.fileName,
             start_line: uRange.start_line,
             end_line: uRange.end_line,
             annotation_level: 'warning',

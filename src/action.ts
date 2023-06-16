@@ -4,7 +4,10 @@ import * as github from '@actions/github'
 import {filterCoverageByFile} from './utils/general'
 import {parseLCov} from './utils/lcov'
 import {parseClover} from './utils/clover'
+import {parseGoCoverage} from './utils/gocoverage'
 import {GithubUtil} from './utils/github'
+
+const SUPPORTED_FORMATS = ['lcov', 'clover', 'go']
 
 /** Starting Point of the Github Action*/
 export async function play(): Promise<void> {
@@ -23,8 +26,10 @@ export async function play(): Promise<void> {
     if (!COVERAGE_FORMAT) {
       COVERAGE_FORMAT = 'lcov'
     }
-    if (!['lcov', 'clover'].includes(COVERAGE_FORMAT)) {
-      throw new Error('COVERAGE_FORMAT must be one of lcov, clover')
+    if (!SUPPORTED_FORMATS.includes(COVERAGE_FORMAT)) {
+      throw new Error(
+        `COVERAGE_FORMAT must be one of ${SUPPORTED_FORMATS.join(',')}`
+      )
     }
 
     // TODO perhaps make base path configurable in case coverage artifacts are
@@ -33,23 +38,28 @@ export async function play(): Promise<void> {
     core.info(`Workspace: ${workspacePath}`)
 
     // 1. Parse coverage file
-    if (COVERAGE_FORMAT == 'lcov') {
-      var parsedCov = await parseLCov(COVERAGE_FILE_PATH)
+    if (COVERAGE_FORMAT === 'clover') {
+      var parsedCov = await parseClover(COVERAGE_FILE_PATH, workspacePath)
+    } else if (COVERAGE_FORMAT === 'go') {
+      var parsedCov = await parseGoCoverage(COVERAGE_FILE_PATH)
     } else {
-      var parsedCov = await parseClover(COVERAGE_FILE_PATH)
+      // lcov default
+      var parsedCov = await parseLCov(COVERAGE_FILE_PATH)
     }
     core.info('Parsing done')
+
     // 2. Filter Coverage By File Name
     const coverageByFile = filterCoverageByFile(parsedCov)
     core.info('Filter done')
     const githubUtil = new GithubUtil(GITHUB_TOKEN)
+
     // 3. Get current pull request files
     const pullRequestFiles = await githubUtil.getPullRequestDiff()
     const annotations = githubUtil.buildAnnotations(
       coverageByFile,
-      pullRequestFiles,
-      workspacePath
+      pullRequestFiles
     )
+
     // 4. Annotate in github
     await githubUtil.annotate({
       referenceCommitHash: githubUtil.getPullRequestRef(),

@@ -3,7 +3,7 @@
 exports[`should parse Clover file 1`] = `
 Array [
   Object {
-    "file": "/var/www/html/app/Actions/MyAction.php",
+    "file": "app/Actions/MyAction.php",
     "functions": Object {
       "details": Array [
         Object {
@@ -165,7 +165,7 @@ Array [
     "title": "App\\\\Actions\\\\MyAction",
   },
   Object {
-    "file": "/var/www/html/app/Console/Kernel.php",
+    "file": "app/Console/Kernel.php",
     "functions": Object {
       "details": Array [
         Object {
@@ -190,7 +190,7 @@ Array [
     "title": "App\\\\Console\\\\Kernel",
   },
   Object {
-    "file": "/var/www/html/app/Events/MyEvent.php",
+    "file": "app/Events/MyEvent.php",
     "functions": Object {
       "details": Array [
         Object {

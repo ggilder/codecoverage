@@ -22,22 +22,18 @@ test('build annotations', function () {
   }
 
   const coverageFiles = [
-    {fileName: '/workspace/unchanged.txt', missingLineNumbers: [1, 2, 3]},
+    {fileName: 'unchanged.txt', missingLineNumbers: [1, 2, 3]},
     {
-      fileName: '/workspace/file1.txt',
+      fileName: 'file1.txt',
       missingLineNumbers: [1, 2, 3, 132, 134, 135, 136, 1007, 1008]
     },
     {
-      fileName: '/workspace/test/dir/file1.txt',
+      fileName: 'test/dir/file1.txt',
       missingLineNumbers: [20, 21, 22]
     }
   ]
 
-  const annotations = githubUtil.buildAnnotations(
-    coverageFiles,
-    prFiles,
-    '/workspace'
-  )
+  const annotations = githubUtil.buildAnnotations(coverageFiles, prFiles)
 
   expect(annotations).toEqual([
     {

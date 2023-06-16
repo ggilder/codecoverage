@@ -1,11 +1,24 @@
 import * as clover from '@cvrg-report/clover-json'
 import * as fs from 'fs'
+import * as path from 'path'
 import {CoverageParsed} from './general'
 
-export async function parseClover(path: string): Promise<CoverageParsed> {
-  if (!path) {
+export async function parseClover(
+  coveragePath: string,
+  workspacePath: string
+): Promise<CoverageParsed> {
+  if (!coveragePath) {
     throw Error('No Clover XML path provided')
   }
-  const fileRaw = fs.readFileSync(path, 'utf8')
-  return clover.parseContent(fileRaw)
+  if (!workspacePath) {
+    throw Error('No workspace path provided')
+  }
+  const fileRaw = fs.readFileSync(coveragePath, 'utf8')
+  const parsed = await clover.parseContent(fileRaw)
+
+  for (const entry of parsed) {
+    entry.file = path.relative(workspacePath, entry.file)
+  }
+
+  return parsed
 }
