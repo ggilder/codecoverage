@@ -41,7 +41,8 @@ export async function play(): Promise<void> {
     if (COVERAGE_FORMAT === 'clover') {
       var parsedCov = await parseClover(COVERAGE_FILE_PATH, workspacePath)
     } else if (COVERAGE_FORMAT === 'go') {
-      var parsedCov = await parseGoCoverage(COVERAGE_FILE_PATH)
+      // Assuming that go.mod is available in working directory
+      var parsedCov = await parseGoCoverage(COVERAGE_FILE_PATH, 'go.mod')
     } else {
       // lcov default
       var parsedCov = await parseLCov(COVERAGE_FILE_PATH)

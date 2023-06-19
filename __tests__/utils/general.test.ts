@@ -4,8 +4,7 @@ import {parseLCov} from '../../src/utils/lcov'
 import {
   filterCoverageByFile,
   coalesceLineNumbers,
-  intersectLineRanges,
-  longestCommonSubpath
+  intersectLineRanges
 } from '../../src/utils/general'
 
 test('filterCoverageByFile', async function () {
@@ -48,20 +47,4 @@ test('range intersections', function () {
   ]
 
   expect(intersectLineRanges(a, b)).toEqual(expected)
-})
-
-test('longestCommonSubpath', function () {
-  let result = longestCommonSubpath([
-    'github.com/stretchr/testify/mock/mock.go',
-    'github.com/stretchr/testify/require/forward_requirements.go',
-    'github.com/stretchr/testify/require/require.go'
-  ])
-  expect(result).toEqual('github.com/stretchr/testify/')
-
-  // Same path
-  result = longestCommonSubpath([
-    'github.com/stretchr/testify/mock/mock.go',
-    'github.com/stretchr/testify/mock/mock.go'
-  ])
-  expect(result).toEqual('github.com/stretchr/testify/mock/')
 })

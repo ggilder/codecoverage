@@ -45097,7 +45097,8 @@ function play() {
                 var parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH, workspacePath);
             }
             else if (COVERAGE_FORMAT === 'go') {
-                var parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH);
+                // Assuming that go.mod is available in working directory
+                var parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH, 'go.mod');
             }
             else {
                 // lcov default
@@ -45311,7 +45312,7 @@ function getLineInfoFromHeaderLine(line) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.longestCommonSubpath = exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
+exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
 function filterCoverageByFile(coverage) {
     return coverage.map(item => {
         var _a;
@@ -45366,29 +45367,6 @@ function intersectLineRanges(a, b) {
     return result;
 }
 exports.intersectLineRanges = intersectLineRanges;
-function longestCommonSubpath(paths) {
-    if (paths.length === 0) {
-        return '';
-    }
-    const splitPaths = paths.map(path => {
-        const parts = path.split('/');
-        return parts.slice(0, parts.length - 1);
-    });
-    let longest = '';
-    let currentSubpath = '';
-    for (let i = 0; i < splitPaths[0].length; i++) {
-        const currentSegment = splitPaths[0][i];
-        for (let j = 1; j < splitPaths.length; j++) {
-            if (splitPaths[j][i] !== currentSegment) {
-                return longest;
-            }
-        }
-        currentSubpath += `${currentSegment}/`;
-        longest = currentSubpath;
-    }
-    return longest;
-}
-exports.longestCommonSubpath = longestCommonSubpath;
 
 
 /***/ }),
@@ -45579,22 +45557,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseGoCoverage = void 0;
 const fs = __importStar(__nccwpck_require__(7147));
 const gocov = __importStar(__nccwpck_require__(6441));
 const path = __importStar(__nccwpck_require__(1017));
-const general_1 = __nccwpck_require__(8915);
-function parseGoCoverage(coveragePath) {
+const readline = __importStar(__nccwpck_require__(4521));
+function parseGoCoverage(coveragePath, goModPath) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!coveragePath) {
             throw Error('No Go coverage path provided');
         }
+        if (!goModPath) {
+            throw Error('No Go module path provided');
+        }
+        const goModule = yield parseGoModFile(goModPath);
         const fileRaw = fs.readFileSync(coveragePath, 'utf8');
         return new Promise((resolve, reject) => {
             gocov.parseContent(fileRaw, (err, result) => {
                 if (err === null) {
-                    filterModulePaths(result);
+                    filterModulePaths(result, goModule);
                     resolve(result);
                 }
                 reject(err);
@@ -45603,12 +45592,39 @@ function parseGoCoverage(coveragePath) {
     });
 }
 exports.parseGoCoverage = parseGoCoverage;
-function filterModulePaths(entries) {
-    const allPaths = entries.map(entry => entry.file);
-    const basePath = (0, general_1.longestCommonSubpath)(allPaths);
+function filterModulePaths(entries, moduleName) {
     for (const entry of entries) {
-        entry.file = path.relative(basePath, entry.file);
+        entry.file = path.relative(moduleName, entry.file);
     }
+}
+function parseGoModFile(filePath) {
+    var e_1, _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const fileStream = fs.createReadStream(filePath);
+        const rl = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity
+        });
+        try {
+            // Note: we use the crlfDelay option to recognize all instances of CR LF
+            // ('\r\n') in input.txt as a single line break.
+            for (var rl_1 = __asyncValues(rl), rl_1_1; rl_1_1 = yield rl_1.next(), !rl_1_1.done;) {
+                const line = rl_1_1.value;
+                if (line.startsWith('module ')) {
+                    return line.slice(7);
+                }
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (rl_1_1 && !rl_1_1.done && (_a = rl_1.return)) yield _a.call(rl_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        /* istanbul ignore next */
+        return '';
+    });
 }
 
 
@@ -45775,6 +45791,14 @@ module.exports = require("path");
 
 "use strict";
 module.exports = require("punycode");
+
+/***/ }),
+
+/***/ 4521:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("readline");
 
 /***/ }),
 
