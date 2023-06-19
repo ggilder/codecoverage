@@ -1,6 +1,9 @@
 name: 'Code Coverage Annotations'
 description: 'Annotate your pull requests to show where test coverage is missing'
 author: '@ggilder'
+branding:
+  icon: alert-triangle
+  color: orange
 inputs:
   GITHUB_TOKEN:
     required: true
