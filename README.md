@@ -4,7 +4,11 @@
 
 # Code Coverage Annotation
 
-Generate code coverage annotation in pull request within Github Action Workflow environment. No data is sent to an external server.
+Reviewing test coverage information for a whole repository can be overwhelming
+and hard to take action on. It's much more useful to catch gaps in coverage as
+they're introduced to a repo, right in the context of pull requests!
+
+All processing is done within Github Actions, no data is sent to an external server.
 
 ## Sample PR Annotation
 <img width="1069" alt="Screen Shot 2022-06-26 at 7 11 21 PM" src="https://user-images.githubusercontent.com/23582455/175847244-dbed2fb3-70be-4bcd-a7d0-64197951c517.png">
@@ -18,14 +22,43 @@ Generate code coverage annotation in pull request within Github Action Workflow 
 | `COVERAGE_FILE_PATH` | **yes**  | -       | Location of coverage file that was generated                                                          |
 | `COVERAGE_FORMAT`    | **no**   | lcov    | Format of coverage file. May be `lcov`, `clover`, or `go`                                             |
 
-## Example
+## Usage
+
+Add the action to your workflow file like so, replacing the file path and
+coverage format with values appropriate for your repo:
+
 ```yaml
-- name: Code Coverage Annotation Line by Line
-  uses: ggilder/codecoverage@release/v0.5.1
+- name: Code Coverage Annotation
+  uses: ggilder/codecoverage@v1
   with:
     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     COVERAGE_FILE_PATH: "./coverage/lcov.info"
+    COVERAGE_FORMAT: "lcov"
 ```
+
+### Golang Workflow Example
+
+```yaml
+- name: Run tests with coverage
+  run: go test -v ./... -coverprofile coverage.out
+
+- name: Code Coverage Annotation
+  uses: ggilder/codecoverage@v1
+  with:
+    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    COVERAGE_FILE_PATH: coverage.out
+    COVERAGE_FORMAT: go
+```
+
+### Javascript/Typescript
+
+Set up `npm run test:cov` in your `package.json` scripts to run `jest --coverage`, which will output Lcov formatted information to `coverage/lcov.info`.
+
+### Other languages
+
+* Java/Groovy can use Clover format
+* PHPUnit will output Clover with the [`--coverage-clover` flag](https://docs.phpunit.de/en/10.2/textui.html#code-coverage)
+* C++: GCC Gcov can output Lcov format; [this blog post](https://shenxianpeng.github.io/2021/07/gcov-example/) may help you get started.
 
 ## Contributing
 
@@ -43,7 +76,7 @@ $ npm run all
 
 Make sure you commit the `dist/` folder or CI will fail.
 
-## Validate
+### Validate
 
 You can validate the action while developing by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
 
@@ -53,3 +86,7 @@ with:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   COVERAGE_FILE_PATH: "./coverage/lcov.info"
 ```
+
+## Acknowledgements
+
+This project was originally based on https://github.com/shravan097/codecoverage (which is unmaintained).
