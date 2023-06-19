@@ -55,35 +55,6 @@ export function intersectLineRanges(
   return result
 }
 
-export function longestCommonSubpath(paths: string[]): string {
-  if (paths.length === 0) {
-    return ''
-  }
-
-  const splitPaths = paths.map(path => {
-    const parts = path.split('/')
-    return parts.slice(0, parts.length - 1)
-  })
-
-  let longest = ''
-  let currentSubpath = ''
-
-  for (let i = 0; i < splitPaths[0].length; i++) {
-    const currentSegment = splitPaths[0][i]
-
-    for (let j = 1; j < splitPaths.length; j++) {
-      if (splitPaths[j][i] !== currentSegment) {
-        return longest
-      }
-    }
-
-    currentSubpath += `${currentSegment}/`
-    longest = currentSubpath
-  }
-
-  return longest
-}
-
 export type CoverageParsed = {
   file: string
   title: string

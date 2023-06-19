@@ -36,8 +36,9 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           COVERAGE_FILE_PATH: "./coverage/lcov.info"
           COVERAGE_FORMAT: "lcov"
+
       - if: github.event_name == 'pull_request' || github.event_name == 'push'
-        uses: coverallsapp/github-action@1.1.3
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
