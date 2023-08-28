@@ -42,8 +42,6 @@ export class GithubUtil {
       prFiles[item.filename] = coalesceLineNumbers(item.addedLines)
     }
 
-    // TODO might need to make this output more concise for large diffs
-    core.info(`PR diff: ${JSON.stringify(prFiles)}`)
     return prFiles
   }
 

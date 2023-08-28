@@ -14,6 +14,9 @@ inputs:
   COVERAGE_FORMAT:
     required: false
     description: 'Format of coverage file. May be `lcov`, `clover`, or `go`.'
+  DEBUG:
+    required: false
+    description: "Log debugging information. Comma-separated list of possible values `coverage`, `pr_lines_added`"
 runs:
   using: 'node16'
   main: 'dist/index.js'

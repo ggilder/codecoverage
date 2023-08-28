@@ -32,6 +32,15 @@ export async function play(): Promise<void> {
       )
     }
 
+    const debugOpts = {}
+    const DEBUG = core.getInput('DEBUG')
+    if (DEBUG) {
+      const debugParts = DEBUG.split(',')
+      for (const part of debugParts) {
+        debugOpts[part] = true
+      }
+    }
+
     // TODO perhaps make base path configurable in case coverage artifacts are
     // not produced on the Github worker?
     const workspacePath = env.GITHUB_WORKSPACE || ''
@@ -52,10 +61,16 @@ export async function play(): Promise<void> {
     // 2. Filter Coverage By File Name
     const coverageByFile = filterCoverageByFile(parsedCov)
     core.info('Filter done')
+    if (debugOpts['coverage']) {
+      core.info(`Coverage: ${JSON.stringify(coverageByFile)}`)
+    }
     const githubUtil = new GithubUtil(GITHUB_TOKEN)
 
     // 3. Get current pull request files
     const pullRequestFiles = await githubUtil.getPullRequestDiff()
+    if (debugOpts['pr_lines_added']) {
+      core.info(`PR lines added: ${JSON.stringify(pullRequestFiles)}`)
+    }
     const annotations = githubUtil.buildAnnotations(
       coverageByFile,
       pullRequestFiles
