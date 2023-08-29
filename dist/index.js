@@ -45088,6 +45088,14 @@ function play() {
             if (!SUPPORTED_FORMATS.includes(COVERAGE_FORMAT)) {
                 throw new Error(`COVERAGE_FORMAT must be one of ${SUPPORTED_FORMATS.join(',')}`);
             }
+            const debugOpts = {};
+            const DEBUG = core.getInput('DEBUG');
+            if (DEBUG) {
+                const debugParts = DEBUG.split(',');
+                for (const part of debugParts) {
+                    debugOpts[part] = true;
+                }
+            }
             // TODO perhaps make base path configurable in case coverage artifacts are
             // not produced on the Github worker?
             const workspacePath = node_process_1.env.GITHUB_WORKSPACE || '';
@@ -45108,9 +45116,15 @@ function play() {
             // 2. Filter Coverage By File Name
             const coverageByFile = (0, general_1.filterCoverageByFile)(parsedCov);
             core.info('Filter done');
+            if (debugOpts['coverage']) {
+                core.info(`Coverage: ${JSON.stringify(coverageByFile)}`);
+            }
             const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
             // 3. Get current pull request files
             const pullRequestFiles = yield githubUtil.getPullRequestDiff();
+            if (debugOpts['pr_lines_added']) {
+                core.info(`PR lines added: ${JSON.stringify(pullRequestFiles)}`);
+            }
             const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
             // 4. Annotate in github
             yield githubUtil.annotate({
@@ -45440,8 +45454,6 @@ class GithubUtil {
             for (const item of fileLines) {
                 prFiles[item.filename] = (0, general_1.coalesceLineNumbers)(item.addedLines);
             }
-            // TODO might need to make this output more concise for large diffs
-            core.info(`PR diff: ${JSON.stringify(prFiles)}`);
             return prFiles;
         });
     }
