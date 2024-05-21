@@ -8,6 +8,7 @@ import {
   intersectLineRanges
 } from './general'
 import {Octokit} from 'octokit'
+import {exec} from 'node:child_process'
 
 export class GithubUtil {
   private client: Octokit
@@ -26,17 +27,30 @@ export class GithubUtil {
       : github.context.ref.replace('refs/heads/', '')
   }
 
+  getPullRequestBaseRef(): string {
+    const pullRequest = github.context.payload.pull_request
+    return pullRequest
+      ? pullRequest.base.ref
+      : // @ts-expect-error Seems like base_ref exists but isn't in the types?
+        github.context.base_ref
+  }
+
   async getPullRequestDiff(): Promise<PullRequestFiles> {
-    const pull_number = github.context.issue.number
-    const response = await this.client.rest.pulls.get({
-      ...github.context.repo,
-      pull_number,
-      mediaType: {
-        format: 'diff'
-      }
-    })
+    const head_ref = this.getPullRequestRef()
+    const base_ref = this.getPullRequestBaseRef()
+    const diffContent = exec(`git diff ${base_ref}...${head_ref}`).stdout
+
+    // const pull_number = github.context.issue.number
+    // const response = await this.client.rest.pulls.get({
+    //   ...github.context.repo,
+    //   pull_number,
+    //   mediaType: {
+    //     format: 'diff'
+    //   }
+    // })
     // @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
-    const fileLines = diff.parseGitDiff(response.data)
+    // const fileLines = diff.parseGitDiff(response.data)
+    const fileLines = diff.parseGitDiff(diffContent)
     const prFiles: PullRequestFiles = {}
     for (const item of fileLines) {
       prFiles[item.filename] = coalesceLineNumbers(item.addedLines)
