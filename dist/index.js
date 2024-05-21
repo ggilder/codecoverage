@@ -45939,17 +45939,14 @@ class GithubUtil {
             ? pullRequest.head.ref
             : github.context.ref.replace('refs/heads/', '');
     }
-    getPullRequestBaseRef() {
-        const pullRequest = github.context.payload.pull_request;
-        return pullRequest
-            ? pullRequest.base.ref
-            : // @ts-expect-error Seems like base_ref exists but isn't in the types?
-                github.context.base_ref;
-    }
     getPullRequestDiff() {
         return __awaiter(this, void 0, void 0, function* () {
-            const head_ref = this.getPullRequestRef();
-            const base_ref = this.getPullRequestBaseRef();
+            const pullRequest = github.context.payload.pull_request;
+            const head_ref = pullRequest ? pullRequest.head.sha : github.context.sha;
+            const base_ref = pullRequest
+                ? pullRequest.base.sha
+                : // @ts-expect-error incorrect type def?
+                    github.context.base_ref;
             const diffContent = (0, node_child_process_1.execSync)(`git diff ${base_ref}...${head_ref}`, {
                 maxBuffer: 10 * 1000 * 1024
             }).toString();
