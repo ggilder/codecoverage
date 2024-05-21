@@ -8,7 +8,7 @@ import {
   intersectLineRanges
 } from './general'
 import {Octokit} from 'octokit'
-import {exec} from 'node:child_process'
+import {execSync} from 'node:child_process'
 
 export class GithubUtil {
   private client: Octokit
@@ -38,7 +38,9 @@ export class GithubUtil {
   async getPullRequestDiff(): Promise<PullRequestFiles> {
     const head_ref = this.getPullRequestRef()
     const base_ref = this.getPullRequestBaseRef()
-    const diffContent = exec(`git diff ${base_ref}...${head_ref}`).stdout
+    const diffContent = execSync(`git diff ${base_ref}...${head_ref}`, {
+      maxBuffer: 10 * 1000 * 1024
+    }).toString()
 
     // const pull_number = github.context.issue.number
     // const response = await this.client.rest.pulls.get({
@@ -48,7 +50,7 @@ export class GithubUtil {
     //     format: 'diff'
     //   }
     // })
-    // @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
+    /////// @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
     // const fileLines = diff.parseGitDiff(response.data)
     const fileLines = diff.parseGitDiff(diffContent)
     const prFiles: PullRequestFiles = {}

@@ -45950,7 +45950,9 @@ class GithubUtil {
         return __awaiter(this, void 0, void 0, function* () {
             const head_ref = this.getPullRequestRef();
             const base_ref = this.getPullRequestBaseRef();
-            const diffContent = (0, node_child_process_1.exec)(`git diff ${base_ref}...${head_ref}`).stdout;
+            const diffContent = (0, node_child_process_1.execSync)(`git diff ${base_ref}...${head_ref}`, {
+                maxBuffer: 10 * 1000 * 1024
+            }).toString();
             // const pull_number = github.context.issue.number
             // const response = await this.client.rest.pulls.get({
             //   ...github.context.repo,
@@ -45959,7 +45961,7 @@ class GithubUtil {
             //     format: 'diff'
             //   }
             // })
-            // @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
+            /////// @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
             // const fileLines = diff.parseGitDiff(response.data)
             const fileLines = diff.parseGitDiff(diffContent);
             const prFiles = {};
