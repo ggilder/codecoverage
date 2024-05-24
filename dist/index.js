@@ -45611,7 +45611,7 @@ function play() {
             // Sum up lines.found for each entry in parsedCov
             const totalLines = parsedCov.reduce((acc, entry) => acc + entry.lines.found, 0);
             const coveredLines = parsedCov.reduce((acc, entry) => acc + entry.lines.hit, 0);
-            core.info('Parsing done. ${parsedCov.length} files parsed. Total lines: ${totalLines}. Covered lines: ${coveredLines}');
+            core.info(`Parsing done. ${parsedCov.length} files parsed. Total lines: ${totalLines}. Covered lines: ${coveredLines}.`);
             // 2. Filter Coverage By File Name
             const coverageByFile = (0, general_1.filterCoverageByFile)(parsedCov);
             core.info('Filter done');

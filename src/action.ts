@@ -66,7 +66,7 @@ export async function play(): Promise<void> {
       0
     )
     core.info(
-      'Parsing done. ${parsedCov.length} files parsed. Total lines: ${totalLines}. Covered lines: ${coveredLines}'
+      `Parsing done. ${parsedCov.length} files parsed. Total lines: ${totalLines}. Covered lines: ${coveredLines}.`
     )
 
     // 2. Filter Coverage By File Name
