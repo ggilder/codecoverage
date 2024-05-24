@@ -8,6 +8,12 @@ test('should parse Clover file', async function () {
   expect(output).toMatchSnapshot()
 })
 
+test('should parse Clover file with paths', async function () {
+  const path = getFixturePath('clover_with_path.xml')
+  const output = await parseClover(path, '/Users/gabriel/src/project')
+  expect(output).toMatchSnapshot()
+})
+
 test('should throw err if file path is not given', async function () {
   await expect(parseClover('', '')).rejects.toThrow(
     'No Clover XML path provided'

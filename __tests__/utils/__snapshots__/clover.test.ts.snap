@@ -162,6 +162,7 @@ Array [
       "found": 34,
       "hit": 33,
     },
+    "path": undefined,
     "title": "App\\\\Actions\\\\MyAction",
   },
   Object {
@@ -187,6 +188,7 @@ Array [
       "found": 1,
       "hit": 1,
     },
+    "path": undefined,
     "title": "App\\\\Console\\\\Kernel",
   },
   Object {
@@ -216,7 +218,413 @@ Array [
       "found": 2,
       "hit": 0,
     },
+    "path": undefined,
     "title": "App\\\\Events\\\\MyEvent",
+  },
+]
+`;
+
+exports[`should parse Clover file with paths 1`] = `
+Array [
+  Object {
+    "file": "sub/app.config.ts",
+    "functions": Object {
+      "details": Array [],
+      "found": 0,
+      "hit": 0,
+    },
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 1,
+        },
+        Object {
+          "hit": 1,
+          "line": 2,
+        },
+        Object {
+          "hit": 1,
+          "line": 3,
+        },
+        Object {
+          "hit": 1,
+          "line": 4,
+        },
+        Object {
+          "hit": 1,
+          "line": 5,
+        },
+        Object {
+          "hit": 1,
+          "line": 6,
+        },
+        Object {
+          "hit": 1,
+          "line": 7,
+        },
+        Object {
+          "hit": 1,
+          "line": 8,
+        },
+        Object {
+          "hit": 1,
+          "line": 9,
+        },
+      ],
+      "found": 9,
+      "hit": 9,
+    },
+    "path": "/Users/gabriel/src/project/sub/app.config.ts",
+    "title": null,
+  },
+  Object {
+    "file": "sub/app.vue",
+    "functions": Object {
+      "details": Array [],
+      "found": 0,
+      "hit": 0,
+    },
+    "lines": Object {
+      "details": Array [
+        Object {
+          "hit": 1,
+          "line": 1,
+        },
+        Object {
+          "hit": 1,
+          "line": 2,
+        },
+        Object {
+          "hit": 1,
+          "line": 3,
+        },
+        Object {
+          "hit": 1,
+          "line": 4,
+        },
+        Object {
+          "hit": 1,
+          "line": 5,
+        },
+        Object {
+          "hit": 1,
+          "line": 6,
+        },
+        Object {
+          "hit": 1,
+          "line": 7,
+        },
+        Object {
+          "hit": 1,
+          "line": 8,
+        },
+        Object {
+          "hit": 1,
+          "line": 9,
+        },
+        Object {
+          "hit": 1,
+          "line": 10,
+        },
+        Object {
+          "hit": 1,
+          "line": 11,
+        },
+        Object {
+          "hit": 1,
+          "line": 12,
+        },
+        Object {
+          "hit": 1,
+          "line": 13,
+        },
+        Object {
+          "hit": 1,
+          "line": 14,
+        },
+        Object {
+          "hit": 1,
+          "line": 15,
+        },
+        Object {
+          "hit": 1,
+          "line": 16,
+        },
+        Object {
+          "hit": 1,
+          "line": 17,
+        },
+        Object {
+          "hit": 1,
+          "line": 18,
+        },
+        Object {
+          "hit": 1,
+          "line": 19,
+        },
+        Object {
+          "hit": 1,
+          "line": 20,
+        },
+        Object {
+          "hit": 1,
+          "line": 21,
+        },
+        Object {
+          "hit": 1,
+          "line": 22,
+        },
+        Object {
+          "hit": 1,
+          "line": 23,
+        },
+        Object {
+          "hit": 1,
+          "line": 24,
+        },
+        Object {
+          "hit": 1,
+          "line": 25,
+        },
+        Object {
+          "hit": 1,
+          "line": 26,
+        },
+        Object {
+          "hit": 1,
+          "line": 27,
+        },
+        Object {
+          "hit": 1,
+          "line": 28,
+        },
+        Object {
+          "hit": 1,
+          "line": 29,
+        },
+        Object {
+          "hit": 1,
+          "line": 30,
+        },
+        Object {
+          "hit": 1,
+          "line": 31,
+        },
+        Object {
+          "hit": 1,
+          "line": 32,
+        },
+        Object {
+          "hit": 1,
+          "line": 33,
+        },
+        Object {
+          "hit": 1,
+          "line": 34,
+        },
+        Object {
+          "hit": 1,
+          "line": 35,
+        },
+        Object {
+          "hit": 1,
+          "line": 36,
+        },
+        Object {
+          "hit": 1,
+          "line": 37,
+        },
+        Object {
+          "hit": 1,
+          "line": 38,
+        },
+        Object {
+          "hit": 1,
+          "line": 39,
+        },
+        Object {
+          "hit": 1,
+          "line": 40,
+        },
+        Object {
+          "hit": 1,
+          "line": 41,
+        },
+        Object {
+          "hit": 1,
+          "line": 42,
+        },
+        Object {
+          "hit": 1,
+          "line": 43,
+        },
+        Object {
+          "hit": 1,
+          "line": 44,
+        },
+        Object {
+          "hit": 1,
+          "line": 45,
+        },
+        Object {
+          "hit": 1,
+          "line": 46,
+        },
+        Object {
+          "hit": 1,
+          "line": 47,
+        },
+        Object {
+          "hit": 1,
+          "line": 48,
+        },
+        Object {
+          "hit": 1,
+          "line": 49,
+        },
+        Object {
+          "hit": 1,
+          "line": 50,
+        },
+        Object {
+          "hit": 1,
+          "line": 51,
+        },
+        Object {
+          "hit": 1,
+          "line": 52,
+        },
+        Object {
+          "hit": 1,
+          "line": 53,
+        },
+        Object {
+          "hit": 1,
+          "line": 54,
+        },
+        Object {
+          "hit": 1,
+          "line": 55,
+        },
+        Object {
+          "hit": 1,
+          "line": 56,
+        },
+        Object {
+          "hit": 1,
+          "line": 57,
+        },
+        Object {
+          "hit": 1,
+          "line": 58,
+        },
+        Object {
+          "hit": 1,
+          "line": 59,
+        },
+        Object {
+          "hit": 1,
+          "line": 60,
+        },
+        Object {
+          "hit": 1,
+          "line": 61,
+        },
+        Object {
+          "hit": 1,
+          "line": 62,
+        },
+        Object {
+          "hit": 1,
+          "line": 63,
+        },
+        Object {
+          "hit": 1,
+          "line": 64,
+        },
+        Object {
+          "hit": 1,
+          "line": 65,
+        },
+        Object {
+          "hit": 1,
+          "line": 66,
+        },
+        Object {
+          "hit": 1,
+          "line": 67,
+        },
+        Object {
+          "hit": 1,
+          "line": 68,
+        },
+        Object {
+          "hit": 1,
+          "line": 69,
+        },
+        Object {
+          "hit": 1,
+          "line": 70,
+        },
+        Object {
+          "hit": 1,
+          "line": 71,
+        },
+        Object {
+          "hit": 1,
+          "line": 72,
+        },
+        Object {
+          "hit": 1,
+          "line": 73,
+        },
+        Object {
+          "hit": 1,
+          "line": 74,
+        },
+        Object {
+          "hit": 1,
+          "line": 75,
+        },
+        Object {
+          "hit": 1,
+          "line": 76,
+        },
+        Object {
+          "hit": 1,
+          "line": 77,
+        },
+        Object {
+          "hit": 1,
+          "line": 78,
+        },
+        Object {
+          "hit": 1,
+          "line": 79,
+        },
+        Object {
+          "hit": 1,
+          "line": 80,
+        },
+        Object {
+          "hit": 1,
+          "line": 81,
+        },
+        Object {
+          "hit": 1,
+          "line": 82,
+        },
+        Object {
+          "hit": 1,
+          "line": 83,
+        },
+      ],
+      "found": 83,
+      "hit": 83,
+    },
+    "path": "/Users/gabriel/src/project/sub/app.vue",
+    "title": null,
   },
 ]
 `;
