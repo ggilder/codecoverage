@@ -17,7 +17,7 @@ export async function parseClover(
   const parsed = await clover.parseContent(fileRaw)
 
   for (const entry of parsed) {
-    entry.file = path.relative(workspacePath, entry.file)
+    entry.file = path.relative(workspacePath, entry.path || entry.file)
   }
 
   return parsed

@@ -2605,10 +2605,10 @@ var classDetailsFromProjects = function (projects) {
     var parseFile = function (fileObj, packageName) {
         if (fileObj.hasOwnProperty("class")) {
             fileObj["class"].forEach(function(classObj) {
-                classDetails = classDetails.concat({ name: classObj.$.name, metrics: classObj.metrics[0], fileName: fileObj.$.name, fileMetrics: fileObj.metrics[0], lines: fileObj.line, packageName: packageName });
+                classDetails = classDetails.concat({ name: classObj.$.name, metrics: classObj.metrics[0], fileName: fileObj.$.name, path: fileObj.$.path, fileMetrics: fileObj.metrics[0], lines: fileObj.line, packageName: packageName });
             });
         } else {
-            classDetails = classDetails.concat({ name: null, metrics: null, fileName: fileObj.$.name, fileMetrics: fileObj.metrics[0], lines: fileObj.line, packageName: packageName });
+            classDetails = classDetails.concat({ name: null, metrics: null, fileName: fileObj.$.name, path: fileObj.$.path, fileMetrics: fileObj.metrics[0], lines: fileObj.line, packageName: packageName });
         }
     }
 
@@ -2661,6 +2661,7 @@ var unpackage = function (projects) {
         var classCov = {
             title: c.name,
             file: c.fileName,
+            path: c.path,
             functions: {
                 found: methodStats.length,
                 hit: 0,
@@ -37118,6 +37119,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
   } catch (ex) {
     Stream = function () {}
   }
+  if (!Stream) Stream = function () {}
 
   var streamWraps = sax.EVENTS.filter(function (ev) {
     return ev !== 'error' && ev !== 'end'
@@ -38436,9 +38438,16 @@ SafeBuffer.allocUnsafeSlow = function (size) {
           }
 
           if (c === ';') {
-            parser[buffer] += parseEntity(parser)
-            parser.entity = ''
-            parser.state = returnState
+            if (parser.opt.unparsedEntities) {
+              var parsedEntity = parseEntity(parser)
+              parser.entity = ''
+              parser.state = returnState
+              parser.write(parsedEntity)
+            } else {
+              parser[buffer] += parseEntity(parser)
+              parser.entity = ''
+              parser.state = returnState
+            }
           } else if (isMatch(parser.entity.length ? entityBody : entityStart, c)) {
             parser.entity += c
           } else {
@@ -38450,8 +38459,9 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
           continue
 
-        default:
+        default: /* istanbul ignore next */ {
           throw new Error(parser, 'Unknown state: ' + parser.state)
+        }
       }
     } // while
 
@@ -45230,7 +45240,7 @@ function parseClover(coveragePath, workspacePath) {
         const fileRaw = fs.readFileSync(coveragePath, 'utf8');
         const parsed = yield clover.parseContent(fileRaw);
         for (const entry of parsed) {
-            entry.file = path.relative(workspacePath, entry.file);
+            entry.file = path.relative(workspacePath, entry.path || entry.file);
         }
         return parsed;
     });
