@@ -53,49 +53,12 @@ export class GithubUtil {
     if (input.annotations.length === 0) {
       return 0
     }
-    // github API lets you post 50 annotations at a time
-    const chunkSize = 50
-    const chunks: Annotations[][] = []
-    for (let i = 0; i < input.annotations.length; i += chunkSize) {
-      chunks.push(input.annotations.slice(i, i + chunkSize))
+    for (const ann of input.annotations) {
+      console.log(
+        `::warning file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`
+      )
     }
-    let lastResponseStatus = 0
-    let checkId
-    for (let i = 0; i < chunks.length; i++) {
-      let status = 'in_progress'
-      let conclusion = ''
-      if (i === chunks.length - 1) {
-        status = 'completed'
-        conclusion = 'success'
-      }
-      const params = {
-        ...github.context.repo,
-        name: 'Annotate',
-        head_sha: input.referenceCommitHash,
-        status,
-        ...(conclusion && {conclusion}),
-        output: {
-          title: 'Coverage Tool',
-          summary: 'Missing Coverage',
-          annotations: chunks[i]
-        }
-      }
-      let response
-      if (i === 0) {
-        response = await this.client.rest.checks.create({
-          ...params
-        })
-        checkId = response.data.id
-      } else {
-        response = await this.client.rest.checks.update({
-          ...params,
-          check_run_id: checkId
-        })
-      }
-      core.info(response.data.output.annotations_url)
-      lastResponseStatus = response.status
-    }
-    return lastResponseStatus
+    return 0
   }
 
   buildAnnotations(
