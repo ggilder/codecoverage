@@ -65,6 +65,25 @@ test('build annotations', function () {
       message: 'This line is not covered by a test'
     }
   ])
+
+  const consoleMock = jest.spyOn(console, 'log').mockImplementation()
+
+  githubUtil.annotate(annotations)
+  expect(console.log).toHaveBeenCalledTimes(4)
+  expect(console.log).toHaveBeenCalledWith(
+    '::warning file=file1.txt,line=132,endLine=132::This line is not covered by a test'
+  )
+  expect(console.log).toHaveBeenCalledWith(
+    '::warning file=file1.txt,line=134,endLine=136::These lines are not covered by a test'
+  )
+  expect(console.log).toHaveBeenCalledWith(
+    '::warning file=file1.txt,line=1007,endLine=1007::This line is not covered by a test'
+  )
+  expect(console.log).toHaveBeenCalledWith(
+    '::warning file=test/dir/file1.txt,line=22,endLine=22::This line is not covered by a test'
+  )
+
+  consoleMock.mockRestore()
 })
 
 // @todo test for rest of github class

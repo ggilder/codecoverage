@@ -45110,17 +45110,18 @@ function play() {
             // not produced on the Github worker?
             const workspacePath = node_process_1.env.GITHUB_WORKSPACE || '';
             core.info(`Workspace: ${workspacePath}`);
+            let parsedCov;
             // 1. Parse coverage file
             if (COVERAGE_FORMAT === 'clover') {
-                var parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH, workspacePath);
+                parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH, workspacePath);
             }
             else if (COVERAGE_FORMAT === 'go') {
                 // Assuming that go.mod is available in working directory
-                var parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH, 'go.mod');
+                parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH, 'go.mod');
             }
             else {
                 // lcov default
-                var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH, workspacePath);
+                parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH, workspacePath);
             }
             // Sum up lines.found for each entry in parsedCov
             const totalLines = parsedCov.reduce((acc, entry) => acc + entry.lines.found, 0);
@@ -45143,10 +45144,7 @@ function play() {
             }
             const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
             // 4. Annotate in github
-            yield githubUtil.annotate({
-                referenceCommitHash: githubUtil.getPullRequestRef(),
-                annotations
-            });
+            githubUtil.annotate(annotations);
             core.info('Annotation done');
         }
         catch (error) {
@@ -45474,19 +45472,12 @@ class GithubUtil {
         });
     }
     /**
-     * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
-     * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
+     * https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-a-warning-message
      */
-    annotate(input) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (input.annotations.length === 0) {
-                return 0;
-            }
-            for (const ann of input.annotations) {
-                console.log(`::warning file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`);
-            }
-            return 0;
-        });
+    annotate(annotations) {
+        for (const ann of annotations) {
+            console.log(`::${ann.annotation_level} file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`);
+        }
     }
     buildAnnotations(coverageFiles, pullRequestFiles) {
         const annotations = [];

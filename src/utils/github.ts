@@ -46,19 +46,14 @@ export class GithubUtil {
   }
 
   /**
-   * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
-   * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
+   * https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-a-warning-message
    */
-  async annotate(input: InputAnnotateParams): Promise<number> {
-    if (input.annotations.length === 0) {
-      return 0
-    }
-    for (const ann of input.annotations) {
+  annotate(annotations: Annotations[]): void {
+    for (const ann of annotations) {
       console.log(
-        `::warning file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`
+        `::${ann.annotation_level} file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`
       )
     }
-    return 0
   }
 
   buildAnnotations(
@@ -95,11 +90,6 @@ export class GithubUtil {
     core.info(`Annotation count: ${annotations.length}`)
     return annotations
   }
-}
-
-type InputAnnotateParams = {
-  referenceCommitHash: string
-  annotations: Annotations[]
 }
 
 type Annotations = {

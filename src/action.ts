@@ -1,7 +1,7 @@
 import {env} from 'node:process'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {filterCoverageByFile} from './utils/general'
+import {CoverageParsed, filterCoverageByFile} from './utils/general'
 import {parseLCov} from './utils/lcov'
 import {parseClover} from './utils/clover'
 import {parseGoCoverage} from './utils/gocoverage'
@@ -46,15 +46,16 @@ export async function play(): Promise<void> {
     const workspacePath = env.GITHUB_WORKSPACE || ''
     core.info(`Workspace: ${workspacePath}`)
 
+    let parsedCov: CoverageParsed
     // 1. Parse coverage file
     if (COVERAGE_FORMAT === 'clover') {
-      var parsedCov = await parseClover(COVERAGE_FILE_PATH, workspacePath)
+      parsedCov = await parseClover(COVERAGE_FILE_PATH, workspacePath)
     } else if (COVERAGE_FORMAT === 'go') {
       // Assuming that go.mod is available in working directory
-      var parsedCov = await parseGoCoverage(COVERAGE_FILE_PATH, 'go.mod')
+      parsedCov = await parseGoCoverage(COVERAGE_FILE_PATH, 'go.mod')
     } else {
       // lcov default
-      var parsedCov = await parseLCov(COVERAGE_FILE_PATH, workspacePath)
+      parsedCov = await parseLCov(COVERAGE_FILE_PATH, workspacePath)
     }
     // Sum up lines.found for each entry in parsedCov
     const totalLines = parsedCov.reduce(
@@ -91,10 +92,7 @@ export async function play(): Promise<void> {
     )
 
     // 4. Annotate in github
-    await githubUtil.annotate({
-      referenceCommitHash: githubUtil.getPullRequestRef(),
-      annotations
-    })
+    githubUtil.annotate(annotations)
     core.info('Annotation done')
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
