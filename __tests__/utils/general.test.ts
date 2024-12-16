@@ -9,7 +9,7 @@ import {
 
 test('filterCoverageByFile', async function () {
   const path = getFixturePath('lcov.info')
-  const parsedLcov = await parseLCov(path)
+  const parsedLcov = await parseLCov(path, '')
   const output = filterCoverageByFile(parsedLcov)
   expect(output).toMatchSnapshot()
 })

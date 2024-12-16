@@ -60,6 +60,7 @@ Set up `npm run test:cov` in your `package.json` scripts to run `jest --coverage
 * Java/Groovy can use Clover format
 * PHPUnit will output Clover with the [`--coverage-clover` flag](https://docs.phpunit.de/en/10.2/textui.html#code-coverage)
 * C++: GCC Gcov can output Lcov format; [this blog post](https://shenxianpeng.github.io/2021/07/gcov-example/) may help you get started.
+* Ruby: Simplecov can output Lcov format when you add the [`simplecov-lcov`](https://github.com/fortissimo1997/simplecov-lcov) gem to your Gemfile. Make sure to set `SimpleCov::Formatter::LcovFormatter.config.report_with_single_file` to `true` and provide the path to the output file using `COVERAGE_FILE_PATH` as described above.
 
 ## Contributing
 

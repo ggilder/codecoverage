@@ -45120,7 +45120,7 @@ function play() {
             }
             else {
                 // lcov default
-                var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH);
+                var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH, workspacePath);
             }
             // Sum up lines.found for each entry in parsedCov
             const totalLines = parsedCov.reduce((acc, entry) => acc + entry.lines.found, 0);
@@ -45702,15 +45702,20 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseLCov = void 0;
 const NodeUtil = __importStar(__nccwpck_require__(3837));
 const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
 const lcov_parse_1 = __importDefault(__nccwpck_require__(7454));
-function parseLCov(lcovPath) {
+function parseLCov(lcovPath, workspacePath) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!lcovPath) {
             throw Error('No LCov path provided');
         }
         const parserPromise = NodeUtil.promisify(lcov_parse_1.default);
         const fileRaw = fs.readFileSync(lcovPath, 'utf8');
-        return parserPromise(fileRaw);
+        const parsed = (yield parserPromise(fileRaw));
+        for (const entry of parsed) {
+            entry.file = path.relative(workspacePath, entry.file);
+        }
+        return parsed;
     });
 }
 exports.parseLCov = parseLCov;
