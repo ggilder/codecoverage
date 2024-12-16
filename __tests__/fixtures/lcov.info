@@ -1,5 +1,5 @@
 TN:
-SF:src/utils/general.ts
+SF:./src/utils/general.ts
 FN:2,getFileNameFirstItemFromPath
 FNF:1
 FNH:0
@@ -29,7 +29,7 @@ BRF:16
 BRH:0
 end_of_record
 TN:
-SF:src/utils/github.ts
+SF:./src/utils/github.ts
 FN:10,(anonymous_13)
 FN:17,(anonymous_14)
 FN:27,(anonymous_15)
@@ -95,7 +95,7 @@ BRF:15
 BRH:0
 end_of_record
 TN:
-SF:src/utils/lcov.ts
+SF:./src/utils/lcov.ts
 FN:5,parseLCov
 FN:14,filterCoverageByFile
 FN:15,(anonymous_17)

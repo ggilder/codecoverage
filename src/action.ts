@@ -54,7 +54,7 @@ export async function play(): Promise<void> {
       var parsedCov = await parseGoCoverage(COVERAGE_FILE_PATH, 'go.mod')
     } else {
       // lcov default
-      var parsedCov = await parseLCov(COVERAGE_FILE_PATH)
+      var parsedCov = await parseLCov(COVERAGE_FILE_PATH, workspacePath)
     }
     // Sum up lines.found for each entry in parsedCov
     const totalLines = parsedCov.reduce(
