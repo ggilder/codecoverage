@@ -45110,17 +45110,18 @@ function play() {
             // not produced on the Github worker?
             const workspacePath = node_process_1.env.GITHUB_WORKSPACE || '';
             core.info(`Workspace: ${workspacePath}`);
+            let parsedCov;
             // 1. Parse coverage file
             if (COVERAGE_FORMAT === 'clover') {
-                var parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH, workspacePath);
+                parsedCov = yield (0, clover_1.parseClover)(COVERAGE_FILE_PATH, workspacePath);
             }
             else if (COVERAGE_FORMAT === 'go') {
                 // Assuming that go.mod is available in working directory
-                var parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH, 'go.mod');
+                parsedCov = yield (0, gocoverage_1.parseGoCoverage)(COVERAGE_FILE_PATH, 'go.mod');
             }
             else {
                 // lcov default
-                var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH, workspacePath);
+                parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH, workspacePath);
             }
             // Sum up lines.found for each entry in parsedCov
             const totalLines = parsedCov.reduce((acc, entry) => acc + entry.lines.found, 0);
@@ -45143,10 +45144,7 @@ function play() {
             }
             const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
             // 4. Annotate in github
-            yield githubUtil.annotate({
-                referenceCommitHash: githubUtil.getPullRequestRef(),
-                annotations
-            });
+            githubUtil.annotate(annotations);
             core.info('Annotation done');
         }
         catch (error) {
@@ -45474,47 +45472,12 @@ class GithubUtil {
         });
     }
     /**
-     * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
-     * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
+     * https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-a-warning-message
      */
-    annotate(input) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (input.annotations.length === 0) {
-                return 0;
-            }
-            // github API lets you post 50 annotations at a time
-            const chunkSize = 50;
-            const chunks = [];
-            for (let i = 0; i < input.annotations.length; i += chunkSize) {
-                chunks.push(input.annotations.slice(i, i + chunkSize));
-            }
-            let lastResponseStatus = 0;
-            let checkId;
-            for (let i = 0; i < chunks.length; i++) {
-                let status = 'in_progress';
-                let conclusion = '';
-                if (i === chunks.length - 1) {
-                    status = 'completed';
-                    conclusion = 'success';
-                }
-                const params = Object.assign(Object.assign(Object.assign(Object.assign({}, github.context.repo), { name: 'Annotate', head_sha: input.referenceCommitHash, status }), (conclusion && { conclusion })), { output: {
-                        title: 'Coverage Tool',
-                        summary: 'Missing Coverage',
-                        annotations: chunks[i]
-                    } });
-                let response;
-                if (i === 0) {
-                    response = yield this.client.rest.checks.create(Object.assign({}, params));
-                    checkId = response.data.id;
-                }
-                else {
-                    response = yield this.client.rest.checks.update(Object.assign(Object.assign({}, params), { check_run_id: checkId }));
-                }
-                core.info(response.data.output.annotations_url);
-                lastResponseStatus = response.status;
-            }
-            return lastResponseStatus;
-        });
+    annotate(annotations) {
+        for (const ann of annotations) {
+            console.log(`::${ann.annotation_level} file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`);
+        }
     }
     buildAnnotations(coverageFiles, pullRequestFiles) {
         const annotations = [];

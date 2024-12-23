@@ -46,56 +46,14 @@ export class GithubUtil {
   }
 
   /**
-   * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
-   * https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run
+   * https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#setting-a-warning-message
    */
-  async annotate(input: InputAnnotateParams): Promise<number> {
-    if (input.annotations.length === 0) {
-      return 0
+  annotate(annotations: Annotations[]): void {
+    for (const ann of annotations) {
+      console.log(
+        `::${ann.annotation_level} file=${ann.path},line=${ann.start_line},endLine=${ann.end_line}::${ann.message}`
+      )
     }
-    // github API lets you post 50 annotations at a time
-    const chunkSize = 50
-    const chunks: Annotations[][] = []
-    for (let i = 0; i < input.annotations.length; i += chunkSize) {
-      chunks.push(input.annotations.slice(i, i + chunkSize))
-    }
-    let lastResponseStatus = 0
-    let checkId
-    for (let i = 0; i < chunks.length; i++) {
-      let status = 'in_progress'
-      let conclusion = ''
-      if (i === chunks.length - 1) {
-        status = 'completed'
-        conclusion = 'success'
-      }
-      const params = {
-        ...github.context.repo,
-        name: 'Annotate',
-        head_sha: input.referenceCommitHash,
-        status,
-        ...(conclusion && {conclusion}),
-        output: {
-          title: 'Coverage Tool',
-          summary: 'Missing Coverage',
-          annotations: chunks[i]
-        }
-      }
-      let response
-      if (i === 0) {
-        response = await this.client.rest.checks.create({
-          ...params
-        })
-        checkId = response.data.id
-      } else {
-        response = await this.client.rest.checks.update({
-          ...params,
-          check_run_id: checkId
-        })
-      }
-      core.info(response.data.output.annotations_url)
-      lastResponseStatus = response.status
-    }
-    return lastResponseStatus
   }
 
   buildAnnotations(
@@ -132,11 +90,6 @@ export class GithubUtil {
     core.info(`Annotation count: ${annotations.length}`)
     return annotations
   }
-}
-
-type InputAnnotateParams = {
-  referenceCommitHash: string
-  annotations: Annotations[]
 }
 
 type Annotations = {
