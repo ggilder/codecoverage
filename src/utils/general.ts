@@ -55,6 +55,17 @@ export function intersectLineRanges(
   return result
 }
 
+export function correctLineTotals(coverage: CoverageParsed): CoverageParsed {
+  return coverage.map(item => ({
+    ...item,
+    lines: {
+      ...item.lines,
+      found: item.lines.details.length,
+      hit: item.lines.details.filter(line => line.hit > 0).length
+    }
+  }))
+}
+
 export type CoverageParsed = {
   file: string
   title: string

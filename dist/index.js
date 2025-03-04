@@ -45122,6 +45122,8 @@ function play() {
                 // lcov default
                 var parsedCov = yield (0, lcov_1.parseLCov)(COVERAGE_FILE_PATH, workspacePath);
             }
+            // Correct line totals
+            parsedCov = (0, general_1.correctLineTotals)(parsedCov);
             // Sum up lines.found for each entry in parsedCov
             const totalLines = parsedCov.reduce((acc, entry) => acc + entry.lines.found, 0);
             const coveredLines = parsedCov.reduce((acc, entry) => acc + entry.lines.hit, 0);
@@ -45342,7 +45344,7 @@ function getLineInfoFromHeaderLine(line) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
+exports.correctLineTotals = exports.intersectLineRanges = exports.coalesceLineNumbers = exports.filterCoverageByFile = void 0;
 function filterCoverageByFile(coverage) {
     return coverage.map(item => {
         var _a;
@@ -45397,6 +45399,10 @@ function intersectLineRanges(a, b) {
     return result;
 }
 exports.intersectLineRanges = intersectLineRanges;
+function correctLineTotals(coverage) {
+    return coverage.map(item => (Object.assign(Object.assign({}, item), { lines: Object.assign(Object.assign({}, item.lines), { found: item.lines.details.length, hit: item.lines.details.filter(line => line.hit > 0).length }) })));
+}
+exports.correctLineTotals = correctLineTotals;
 
 
 /***/ }),
