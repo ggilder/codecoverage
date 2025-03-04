@@ -4,7 +4,8 @@ import {parseLCov} from '../../src/utils/lcov'
 import {
   filterCoverageByFile,
   coalesceLineNumbers,
-  intersectLineRanges
+  intersectLineRanges,
+  correctLineTotals
 } from '../../src/utils/general'
 
 test('filterCoverageByFile', async function () {
@@ -47,4 +48,64 @@ test('range intersections', function () {
   ]
 
   expect(intersectLineRanges(a, b)).toEqual(expected)
+})
+
+test('correctLineTotals', function () {
+  const mockCoverage = [
+    {
+      file: 'test.ts',
+      title: 'Test File',
+      lines: {
+        found: 0, // Incorrect initial value
+        hit: 0, // Incorrect initial value
+        details: [
+          {line: 1, hit: 1, name: 'line1'},
+          {line: 2, hit: 0, name: 'line2'},
+          {line: 3, hit: 2, name: 'line3'},
+          {line: 4, hit: 0, name: 'line4'}
+        ]
+      }
+    }
+  ]
+
+  const result = correctLineTotals(mockCoverage)
+  expect(result[0].lines.found).toBe(4)
+  expect(result[0].lines.hit).toBe(2)
+  expect(result[0].file).toBe('test.ts')
+  expect(result[0].title).toBe('Test File')
+
+  // Test with multiple files
+  const multiFileMock = [
+    {
+      file: 'file1.ts',
+      title: 'File 1',
+      lines: {
+        found: 0,
+        hit: 0,
+        details: [
+          {line: 1, hit: 1, name: 'line1'},
+          {line: 2, hit: 1, name: 'line2'}
+        ]
+      }
+    },
+    {
+      file: 'file2.ts',
+      title: 'File 2',
+      lines: {
+        found: 0,
+        hit: 0,
+        details: [
+          {line: 1, hit: 0, name: 'line1'},
+          {line: 2, hit: 0, name: 'line2'},
+          {line: 3, hit: 1, name: 'line3'}
+        ]
+      }
+    }
+  ]
+
+  const multiResult = correctLineTotals(multiFileMock)
+  expect(multiResult[0].lines.found).toBe(2)
+  expect(multiResult[0].lines.hit).toBe(2)
+  expect(multiResult[1].lines.found).toBe(3)
+  expect(multiResult[1].lines.hit).toBe(1)
 })

@@ -1,7 +1,7 @@
 import {env} from 'node:process'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {filterCoverageByFile} from './utils/general'
+import {correctLineTotals, filterCoverageByFile} from './utils/general'
 import {parseLCov} from './utils/lcov'
 import {parseClover} from './utils/clover'
 import {parseGoCoverage} from './utils/gocoverage'
@@ -56,6 +56,9 @@ export async function play(): Promise<void> {
       // lcov default
       var parsedCov = await parseLCov(COVERAGE_FILE_PATH, workspacePath)
     }
+    // Correct line totals
+    parsedCov = correctLineTotals(parsedCov)
+
     // Sum up lines.found for each entry in parsedCov
     const totalLines = parsedCov.reduce(
       (acc, entry) => acc + entry.lines.found,
