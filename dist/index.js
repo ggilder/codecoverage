@@ -45088,6 +45088,7 @@ function play() {
             }
             core.info('Performing Code Coverage Analysis');
             const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN', { required: true });
+            const GITHUB_BASE_URL = core.getInput('GITHUB_BASE_URL');
             const COVERAGE_FILE_PATH = core.getInput('COVERAGE_FILE_PATH', {
                 required: true
             });
@@ -45137,7 +45138,7 @@ function play() {
                     core.info(JSON.stringify(item));
                 }
             }
-            const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN);
+            const githubUtil = new github_1.GithubUtil(GITHUB_TOKEN, GITHUB_BASE_URL);
             // 3. Get current pull request files
             const pullRequestFiles = yield githubUtil.getPullRequestDiff();
             if (debugOpts['pr_lines_added']) {
@@ -45452,11 +45453,11 @@ const github = __importStar(__nccwpck_require__(5438));
 const general_1 = __nccwpck_require__(8915);
 const octokit_1 = __nccwpck_require__(7467);
 class GithubUtil {
-    constructor(token) {
+    constructor(token, baseUrl) {
         if (!token) {
             throw new Error('GITHUB_TOKEN is missing');
         }
-        this.client = new octokit_1.Octokit({ auth: token });
+        this.client = new octokit_1.Octokit({ auth: token, baseUrl });
     }
     getPullRequestRef() {
         const pullRequest = github.context.payload.pull_request;

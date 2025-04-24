@@ -18,6 +18,7 @@ export async function play(): Promise<void> {
     }
     core.info('Performing Code Coverage Analysis')
     const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN', {required: true})
+    const GITHUB_BASE_URL = core.getInput('GITHUB_BASE_URL')
     const COVERAGE_FILE_PATH = core.getInput('COVERAGE_FILE_PATH', {
       required: true
     })
@@ -81,7 +82,7 @@ export async function play(): Promise<void> {
         core.info(JSON.stringify(item))
       }
     }
-    const githubUtil = new GithubUtil(GITHUB_TOKEN)
+    const githubUtil = new GithubUtil(GITHUB_TOKEN, GITHUB_BASE_URL)
 
     // 3. Get current pull request files
     const pullRequestFiles = await githubUtil.getPullRequestDiff()
