@@ -1,4 +1,4 @@
-import {test} from '@jest/globals'
+import {test, expect} from 'vitest'
 import {getFixturePath} from '../fixtures/util'
 import {parseLCov} from '../../src/utils/lcov'
 import {

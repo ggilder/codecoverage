@@ -1,101 +1,101 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should parse lCov file 1`] = `
-Array [
-  Object {
-    "branches": Object {
-      "details": Array [
-        Object {
+[
+  {
+    "branches": {
+      "details": [
+        {
           "block": 0,
           "branch": 0,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 0,
           "branch": 1,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 1,
           "branch": 0,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 1,
           "branch": 1,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 2,
           "branch": 0,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 2,
           "branch": 1,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 3,
           "branch": 0,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 3,
           "branch": 1,
           "line": 3,
           "taken": 0,
         },
-        Object {
+        {
           "block": 4,
           "branch": 0,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 4,
           "branch": 1,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 5,
           "branch": 0,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 5,
           "branch": 1,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 6,
           "branch": 0,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 6,
           "branch": 1,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 7,
           "branch": 0,
           "line": 4,
           "taken": 0,
         },
-        Object {
+        {
           "block": 7,
           "branch": 1,
           "line": 4,
@@ -106,9 +106,9 @@ Array [
       "hit": 0,
     },
     "file": "src/utils/general.ts",
-    "functions": Object {
-      "details": Array [
-        Object {
+    "functions": {
+      "details": [
+        {
           "hit": 0,
           "line": 2,
           "name": "getFileNameFirstItemFromPath",
@@ -117,17 +117,17 @@ Array [
       "found": 1,
       "hit": 0,
     },
-    "lines": Object {
-      "details": Array [
-        Object {
+    "lines": {
+      "details": [
+        {
           "hit": 1,
           "line": 2,
         },
-        Object {
+        {
           "hit": 0,
           "line": 3,
         },
-        Object {
+        {
           "hit": 0,
           "line": 4,
         },
@@ -137,94 +137,94 @@ Array [
     },
     "title": "",
   },
-  Object {
-    "branches": Object {
-      "details": Array [
-        Object {
+  {
+    "branches": {
+      "details": [
+        {
           "block": 0,
           "branch": 0,
           "line": 11,
           "taken": 0,
         },
-        Object {
+        {
           "block": 1,
           "branch": 0,
           "line": 19,
           "taken": 0,
         },
-        Object {
+        {
           "block": 1,
           "branch": 1,
           "line": 19,
           "taken": 0,
         },
-        Object {
+        {
           "block": 2,
           "branch": 0,
           "line": 36,
           "taken": 0,
         },
-        Object {
+        {
           "block": 2,
           "branch": 1,
           "line": 36,
           "taken": 0,
         },
-        Object {
+        {
           "block": 3,
           "branch": 0,
           "line": 36,
           "taken": 0,
         },
-        Object {
+        {
           "block": 3,
           "branch": 1,
           "line": 36,
           "taken": 0,
         },
-        Object {
+        {
           "block": 4,
           "branch": 0,
           "line": 37,
           "taken": 0,
         },
-        Object {
+        {
           "block": 5,
           "branch": 0,
           "line": 67,
           "taken": 0,
         },
-        Object {
+        {
           "block": 5,
           "branch": 1,
           "line": 67,
           "taken": 0,
         },
-        Object {
+        {
           "block": 6,
           "branch": 0,
           "line": 67,
           "taken": 0,
         },
-        Object {
+        {
           "block": 6,
           "branch": 1,
           "line": 67,
           "taken": 0,
         },
-        Object {
+        {
           "block": 7,
           "branch": 0,
           "line": 68,
           "taken": 0,
         },
-        Object {
+        {
           "block": 8,
           "branch": 0,
           "line": 68,
           "taken": 0,
         },
-        Object {
+        {
           "block": 8,
           "branch": 1,
           "line": 68,
@@ -235,34 +235,34 @@ Array [
       "hit": 0,
     },
     "file": "src/utils/github.ts",
-    "functions": Object {
-      "details": Array [
-        Object {
+    "functions": {
+      "details": [
+        {
           "hit": 1,
           "line": 10,
           "name": "(anonymous_13)",
         },
-        Object {
+        {
           "hit": 0,
           "line": 17,
           "name": "(anonymous_14)",
         },
-        Object {
+        {
           "hit": 0,
           "line": 27,
           "name": "(anonymous_15)",
         },
-        Object {
+        {
           "hit": 0,
           "line": 42,
           "name": "(anonymous_17)",
         },
-        Object {
+        {
           "hit": 0,
           "line": 60,
           "name": "(anonymous_19)",
         },
-        Object {
+        {
           "hit": 0,
           "line": 69,
           "name": "(anonymous_20)",
@@ -271,125 +271,125 @@ Array [
       "found": 6,
       "hit": 1,
     },
-    "lines": Object {
-      "details": Array [
-        Object {
+    "lines": {
+      "details": [
+        {
           "hit": 1,
           "line": 1,
         },
-        Object {
+        {
           "hit": 1,
           "line": 2,
         },
-        Object {
+        {
           "hit": 1,
           "line": 4,
         },
-        Object {
+        {
           "hit": 1,
           "line": 5,
         },
-        Object {
+        {
           "hit": 1,
           "line": 7,
         },
-        Object {
+        {
           "hit": 1,
           "line": 11,
         },
-        Object {
+        {
           "hit": 0,
           "line": 12,
         },
-        Object {
+        {
           "hit": 1,
           "line": 14,
         },
-        Object {
+        {
           "hit": 0,
           "line": 18,
         },
-        Object {
+        {
           "hit": 0,
           "line": 19,
         },
-        Object {
+        {
           "hit": 0,
           "line": 28,
         },
-        Object {
+        {
           "hit": 0,
           "line": 29,
         },
-        Object {
+        {
           "hit": 0,
           "line": 33,
         },
-        Object {
+        {
           "hit": 0,
           "line": 34,
         },
-        Object {
+        {
           "hit": 0,
           "line": 35,
         },
-        Object {
+        {
           "hit": 0,
           "line": 36,
         },
-        Object {
+        {
           "hit": 0,
           "line": 37,
         },
-        Object {
+        {
           "hit": 0,
           "line": 39,
         },
-        Object {
+        {
           "hit": 0,
           "line": 40,
         },
-        Object {
+        {
           "hit": 0,
           "line": 44,
         },
-        Object {
+        {
           "hit": 0,
           "line": 56,
         },
-        Object {
+        {
           "hit": 0,
           "line": 57,
         },
-        Object {
+        {
           "hit": 0,
           "line": 64,
         },
-        Object {
+        {
           "hit": 0,
           "line": 65,
         },
-        Object {
+        {
           "hit": 0,
           "line": 67,
         },
-        Object {
+        {
           "hit": 0,
           "line": 68,
         },
-        Object {
+        {
           "hit": 0,
           "line": 69,
         },
-        Object {
+        {
           "hit": 0,
           "line": 70,
         },
-        Object {
+        {
           "hit": 0,
           "line": 82,
         },
-        Object {
+        {
           "hit": 0,
           "line": 83,
         },
@@ -399,58 +399,58 @@ Array [
     },
     "title": "",
   },
-  Object {
-    "branches": Object {
-      "details": Array [
-        Object {
+  {
+    "branches": {
+      "details": [
+        {
           "block": 0,
           "branch": 0,
           "line": 6,
           "taken": 0,
         },
-        Object {
+        {
           "block": 1,
           "branch": 0,
           "line": 17,
           "taken": 0,
         },
-        Object {
+        {
           "block": 1,
           "branch": 1,
           "line": 17,
           "taken": 4,
         },
-        Object {
+        {
           "block": 2,
           "branch": 0,
           "line": 17,
           "taken": 4,
         },
-        Object {
+        {
           "block": 2,
           "branch": 1,
           "line": 17,
           "taken": 4,
         },
-        Object {
+        {
           "block": 3,
           "branch": 0,
           "line": 17,
           "taken": 0,
         },
-        Object {
+        {
           "block": 3,
           "branch": 1,
           "line": 17,
           "taken": 4,
         },
-        Object {
+        {
           "block": 4,
           "branch": 0,
           "line": 17,
           "taken": 4,
         },
-        Object {
+        {
           "block": 4,
           "branch": 1,
           "line": 17,
@@ -461,29 +461,29 @@ Array [
       "hit": 6,
     },
     "file": "src/utils/lcov.ts",
-    "functions": Object {
-      "details": Array [
-        Object {
+    "functions": {
+      "details": [
+        {
           "hit": 0,
           "line": 5,
           "name": "parseLCov",
         },
-        Object {
+        {
           "hit": 1,
           "line": 14,
           "name": "filterCoverageByFile",
         },
-        Object {
+        {
           "hit": 4,
           "line": 15,
           "name": "(anonymous_17)",
         },
-        Object {
+        {
           "hit": 18,
           "line": 18,
           "name": "(anonymous_18)",
         },
-        Object {
+        {
           "hit": 12,
           "line": 19,
           "name": "(anonymous_19)",
@@ -492,57 +492,57 @@ Array [
       "found": 5,
       "hit": 4,
     },
-    "lines": Object {
-      "details": Array [
-        Object {
+    "lines": {
+      "details": [
+        {
           "hit": 1,
           "line": 1,
         },
-        Object {
+        {
           "hit": 1,
           "line": 2,
         },
-        Object {
+        {
           "hit": 1,
           "line": 3,
         },
-        Object {
+        {
           "hit": 1,
           "line": 5,
         },
-        Object {
+        {
           "hit": 0,
           "line": 6,
         },
-        Object {
+        {
           "hit": 0,
           "line": 7,
         },
-        Object {
+        {
           "hit": 0,
           "line": 9,
         },
-        Object {
+        {
           "hit": 0,
           "line": 10,
         },
-        Object {
+        {
           "hit": 0,
           "line": 11,
         },
-        Object {
+        {
           "hit": 1,
           "line": 14,
         },
-        Object {
+        {
           "hit": 4,
           "line": 15,
         },
-        Object {
+        {
           "hit": 18,
           "line": 18,
         },
-        Object {
+        {
           "hit": 12,
           "line": 19,
         },

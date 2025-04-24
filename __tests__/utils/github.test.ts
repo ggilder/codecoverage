@@ -1,4 +1,4 @@
-import {test} from '@jest/globals'
+import {test, expect} from 'vitest'
 import {GithubUtil} from '../../src/utils/github'
 
 test('github init successfully', async function () {

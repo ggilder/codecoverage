@@ -1,4 +1,4 @@
-import {play} from './action'
+import {play} from './action.js'
 
 async function run(): Promise<void> {
   return play()

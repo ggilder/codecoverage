@@ -1,7 +1,7 @@
 import * as NodeUtil from 'util'
 import * as fs from 'fs'
 import * as path from 'path'
-import {CoverageParsed} from './general'
+import {CoverageParsed} from './general.js'
 import parser from 'lcov-parse'
 
 export async function parseLCov(

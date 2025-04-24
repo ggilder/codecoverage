@@ -1,24 +1,24 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should parse Git diff 1`] = `
-Array [
-  Object {
-    "addedLines": Array [
+[
+  {
+    "addedLines": [
       2,
       5,
       11,
       14,
     ],
-    "deletedLines": Array [
+    "deletedLines": [
       2,
     ],
     "filename": "file1.txt",
   },
-  Object {
-    "addedLines": Array [
+  {
+    "addedLines": [
       1,
     ],
-    "deletedLines": Array [
+    "deletedLines": [
       1,
     ],
     "filename": "file2.txt",

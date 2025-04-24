@@ -1,7 +1,7 @@
 import * as clover from '@cvrg-report/clover-json'
 import * as fs from 'fs'
 import * as path from 'path'
-import {CoverageParsed} from './general'
+import {CoverageParsed} from './general.js'
 
 export async function parseClover(
   coveragePath: string,
