@@ -35,8 +35,7 @@ export class GithubUtil {
         format: 'diff'
       }
     })
-    // @ts-expect-error With mediaType param, response.data is actually a string, but the response type doesn't reflect this
-    const fileLines = diff.parseGitDiff(response.data)
+    const fileLines = diff.parseGitDiff(response.data as unknown as string)
     const prFiles: PullRequestFiles = {}
     for (const item of fileLines) {
       prFiles[item.filename] = coalesceLineNumbers(item.addedLines)
@@ -62,8 +61,17 @@ export class GithubUtil {
     let lastResponseStatus = 0
     let checkId
     for (let i = 0; i < chunks.length; i++) {
-      let status = 'in_progress'
-      let conclusion = ''
+      let status: 'in_progress' | 'completed' | 'queued' = 'in_progress'
+      let conclusion:
+        | 'success'
+        | 'action_required'
+        | 'cancelled'
+        | 'failure'
+        | 'neutral'
+        | 'skipped'
+        | 'stale'
+        | 'timed_out'
+        | undefined = undefined
       if (i === chunks.length - 1) {
         status = 'completed'
         conclusion = 'success'
@@ -89,7 +97,8 @@ export class GithubUtil {
       } else {
         response = await this.client.rest.checks.update({
           ...params,
-          check_run_id: checkId
+          check_run_id: checkId,
+          status: 'in_progress' as const
         })
       }
       core.info(response.data.output.annotations_url)
@@ -145,7 +154,7 @@ type Annotations = {
   end_line: number
   start_column?: number
   end_column?: number
-  annotation_level: string
+  annotation_level: 'notice' | 'warning' | 'failure'
   message: string
 }
 

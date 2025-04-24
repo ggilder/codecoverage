@@ -1,4 +1,4 @@
-import {test} from '@jest/globals'
+import {test, expect} from 'vitest'
 import {parseGitDiff} from '../../src/utils/diff'
 import {getFixturePath} from '../fixtures/util'
 import * as fs from 'fs'

@@ -1,4 +1,4 @@
-import {test} from '@jest/globals'
+import {test, expect} from 'vitest'
 import {parseClover} from '../../src/utils/clover'
 import {getFixturePath} from '../fixtures/util'
 

@@ -1,4 +1,4 @@
-import {test} from '@jest/globals'
+import {test, expect} from 'vitest'
 import {parseGoCoverage} from '../../src/utils/gocoverage'
 import {getFixturePath} from '../fixtures/util'
 

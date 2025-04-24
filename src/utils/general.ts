@@ -7,15 +7,15 @@ export function filterCoverageByFile(coverage: CoverageParsed): CoverageFile[] {
   }))
 }
 
-export function coalesceLineNumbers(lines: number[]): LineRange[] {
+export function coalesceLineNumbers(lineNumbers: number[]): LineRange[] {
   const ranges: LineRange[] = []
   let rstart
   let rend
-  for (let i = 0; i < lines.length; i++) {
-    rstart = lines[i]
+  for (let i = 0; i < lineNumbers.length; i++) {
+    rstart = lineNumbers[i]
     rend = rstart
-    while (lines[i + 1] - lines[i] === 1) {
-      rend = lines[i + 1]
+    while (lineNumbers[i + 1] - lineNumbers[i] === 1) {
+      rend = lineNumbers[i + 1]
       i++
     }
     ranges.push({start_line: rstart, end_line: rend})

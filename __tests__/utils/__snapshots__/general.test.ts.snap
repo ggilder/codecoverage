@@ -1,17 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`filterCoverageByFile 1`] = `
-Array [
-  Object {
+[
+  {
     "fileName": "src/utils/general.ts",
-    "missingLineNumbers": Array [
+    "missingLineNumbers": [
       3,
       4,
     ],
   },
-  Object {
+  {
     "fileName": "src/utils/github.ts",
-    "missingLineNumbers": Array [
+    "missingLineNumbers": [
       12,
       18,
       19,
@@ -37,9 +37,9 @@ Array [
       83,
     ],
   },
-  Object {
+  {
     "fileName": "src/utils/lcov.ts",
-    "missingLineNumbers": Array [
+    "missingLineNumbers": [
       6,
       7,
       9,

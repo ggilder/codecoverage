@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as gocov from 'golang-cover-parse'
 import * as path from 'path'
 import * as readline from 'readline'
-import {CoverageParsed} from './general'
+import {CoverageParsed} from './general.js'
 
 export async function parseGoCoverage(
   coveragePath: string,

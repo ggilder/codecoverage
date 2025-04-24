@@ -1,11 +1,11 @@
 import {env} from 'node:process'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {correctLineTotals, filterCoverageByFile} from './utils/general'
-import {parseLCov} from './utils/lcov'
-import {parseClover} from './utils/clover'
-import {parseGoCoverage} from './utils/gocoverage'
-import {GithubUtil} from './utils/github'
+import {correctLineTotals, filterCoverageByFile} from './utils/general.js'
+import {parseLCov} from './utils/lcov.js'
+import {parseClover} from './utils/clover.js'
+import {parseGoCoverage} from './utils/gocoverage.js'
+import {GithubUtil} from './utils/github.js'
 
 const SUPPORTED_FORMATS = ['lcov', 'clover', 'go']
 
