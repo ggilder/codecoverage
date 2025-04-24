@@ -12,11 +12,11 @@ import {Octokit} from 'octokit'
 export class GithubUtil {
   private client: Octokit
 
-  constructor(token: string) {
+  constructor(token: string, baseUrl: string) {
     if (!token) {
       throw new Error('GITHUB_TOKEN is missing')
     }
-    this.client = new Octokit({auth: token})
+    this.client = new Octokit({auth: token, baseUrl})
   }
 
   getPullRequestRef(): string {
