@@ -41288,6 +41288,35 @@ async function parseGoModFile(filePath) {
 }
 
 ;// CONCATENATED MODULE: ./src/utils/diff.ts
+/**
+ * Parse a single file's patch (from GitHub's listFiles API) to extract added line numbers.
+ * The patch format contains only hunk headers (@@) and changes, not the full diff header.
+ */
+function parsePatch(patch) {
+    const addedLines = [];
+    const lines = patch.split('\n');
+    let additionCurrentLineNumber = 0;
+    let seenHeaderLine = false;
+    for (const line of lines) {
+        if (line.startsWith('@@')) {
+            seenHeaderLine = true;
+            const lineInfo = getLineInfoFromHeaderLine(line);
+            additionCurrentLineNumber = lineInfo.additionStartingLineNumber;
+        }
+        else if (line.startsWith('+') && seenHeaderLine) {
+            addedLines.push(additionCurrentLineNumber);
+            additionCurrentLineNumber++;
+        }
+        else if (line.startsWith('-') && seenHeaderLine) {
+            // Deleted line - don't increment addition line number
+        }
+        else if (seenHeaderLine) {
+            // Context line
+            additionCurrentLineNumber++;
+        }
+    }
+    return addedLines;
+}
 function parseGitDiff(diffOutput) {
     const fileDiffs = [];
     const lines = diffOutput.split('\n');
@@ -51337,17 +51366,22 @@ class GithubUtil {
     }
     async getPullRequestDiff() {
         const pull_number = github.context.issue.number;
-        const response = await this.client.rest.pulls.get({
+        const prFiles = {};
+        // Use paginated listFiles API to handle PRs with more than 300 files
+        const iterator = this.client.paginate.iterator(this.client.rest.pulls.listFiles, {
             ...github.context.repo,
             pull_number,
-            mediaType: {
-                format: 'diff'
-            }
+            per_page: 100
         });
-        const fileLines = parseGitDiff(response.data);
-        const prFiles = {};
-        for (const item of fileLines) {
-            prFiles[item.filename] = coalesceLineNumbers(item.addedLines);
+        for await (const response of iterator) {
+            for (const file of response.data) {
+                if (file.patch) {
+                    const addedLines = parsePatch(file.patch);
+                    if (addedLines.length > 0) {
+                        prFiles[file.filename] = coalesceLineNumbers(addedLines);
+                    }
+                }
+            }
         }
         return prFiles;
     }
