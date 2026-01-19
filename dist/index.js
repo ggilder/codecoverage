@@ -41293,9 +41293,6 @@ async function parseGoModFile(filePath) {
  * The patch format contains only hunk headers (@@) and changes, not the full diff header.
  */
 function parsePatch(patch) {
-    if (!patch) {
-        return [];
-    }
     const addedLines = [];
     const lines = patch.split('\n');
     let additionCurrentLineNumber = 0;
@@ -51378,9 +51375,11 @@ class GithubUtil {
         });
         for await (const response of iterator) {
             for (const file of response.data) {
-                const addedLines = parsePatch(file.patch);
-                if (addedLines.length > 0) {
-                    prFiles[file.filename] = coalesceLineNumbers(addedLines);
+                if (file.patch) {
+                    const addedLines = parsePatch(file.patch);
+                    if (addedLines.length > 0) {
+                        prFiles[file.filename] = coalesceLineNumbers(addedLines);
+                    }
                 }
             }
         }

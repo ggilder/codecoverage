@@ -11,10 +11,6 @@ test('should parse Git diff', async function () {
   expect(output).toMatchSnapshot()
 })
 
-test('parsePatch should return empty array for undefined patch', () => {
-  expect(parsePatch(undefined)).toEqual([])
-})
-
 test('parsePatch should return empty array for empty patch', () => {
   expect(parsePatch('')).toEqual([])
 })

@@ -8,11 +8,7 @@ interface FileDiff {
  * Parse a single file's patch (from GitHub's listFiles API) to extract added line numbers.
  * The patch format contains only hunk headers (@@) and changes, not the full diff header.
  */
-export function parsePatch(patch: string | undefined): number[] {
-  if (!patch) {
-    return []
-  }
-
+export function parsePatch(patch: string): number[] {
   const addedLines: number[] = []
   const lines = patch.split('\n')
   let additionCurrentLineNumber = 0
