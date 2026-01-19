@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import * as diff from './diff'
+import {parsePatch} from './diff'
 import * as github from '@actions/github'
 import {
   CoverageFile,
@@ -28,17 +28,25 @@ export class GithubUtil {
 
   async getPullRequestDiff(): Promise<PullRequestFiles> {
     const pull_number = github.context.issue.number
-    const response = await this.client.rest.pulls.get({
-      ...github.context.repo,
-      pull_number,
-      mediaType: {
-        format: 'diff'
-      }
-    })
-    const fileLines = diff.parseGitDiff(response.data as unknown as string)
     const prFiles: PullRequestFiles = {}
-    for (const item of fileLines) {
-      prFiles[item.filename] = coalesceLineNumbers(item.addedLines)
+
+    // Use paginated listFiles API to handle PRs with more than 300 files
+    const iterator = this.client.paginate.iterator(
+      this.client.rest.pulls.listFiles,
+      {
+        ...github.context.repo,
+        pull_number,
+        per_page: 100
+      }
+    )
+
+    for await (const response of iterator) {
+      for (const file of response.data) {
+        const addedLines = parsePatch(file.patch)
+        if (addedLines.length > 0) {
+          prFiles[file.filename] = coalesceLineNumbers(addedLines)
+        }
+      }
     }
 
     return prFiles
