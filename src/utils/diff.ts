@@ -1,9 +1,3 @@
-interface FileDiff {
-  filename: string
-  addedLines: number[]
-  deletedLines: number[]
-}
-
 /**
  * Parse a single file's patch (from GitHub's listFiles API) to extract added line numbers.
  * The patch format contains only hunk headers (@@) and changes, not the full diff header.
@@ -31,73 +25,6 @@ export function parsePatch(patch: string): number[] {
   }
 
   return addedLines
-}
-
-export function parseGitDiff(diffOutput: string): FileDiff[] {
-  const fileDiffs: FileDiff[] = []
-  const lines = diffOutput.split('\n')
-
-  let currentFileDiff: FileDiff | undefined
-  let currentAddedLines: number[] = []
-  let currentDeletedLines: number[] = []
-  let seenHeaderLine = false
-  let deletionCurrentLineNumber = 0
-  let additionCurrentLineNumber = 0
-
-  for (const line of lines) {
-    if (line.startsWith('diff --git')) {
-      // New file diff starts
-      if (currentFileDiff) {
-        currentFileDiff.addedLines = currentAddedLines
-        currentFileDiff.deletedLines = currentDeletedLines
-        fileDiffs.push(currentFileDiff)
-      }
-
-      currentFileDiff = {
-        filename: getFilenameFromDiffHeader(line),
-        addedLines: [],
-        deletedLines: []
-      }
-      currentAddedLines = []
-      currentDeletedLines = []
-      seenHeaderLine = false
-    } else if (line.startsWith('@@')) {
-      // Header line
-      seenHeaderLine = true
-      const lineInfo = getLineInfoFromHeaderLine(line)
-      deletionCurrentLineNumber = lineInfo.deletionStartingLineNumber
-      additionCurrentLineNumber = lineInfo.additionStartingLineNumber
-    } else if (line.startsWith('+') && seenHeaderLine) {
-      // Added line
-      currentAddedLines.push(additionCurrentLineNumber)
-      additionCurrentLineNumber++
-    } else if (line.startsWith('-') && seenHeaderLine) {
-      // Deleted line
-      currentDeletedLines.push(deletionCurrentLineNumber)
-      deletionCurrentLineNumber++
-    } else if (seenHeaderLine) {
-      // Context line
-      deletionCurrentLineNumber++
-      additionCurrentLineNumber++
-    }
-  }
-
-  // Add the last file diff
-  if (currentFileDiff) {
-    currentFileDiff.addedLines = currentAddedLines
-    currentFileDiff.deletedLines = currentDeletedLines
-    fileDiffs.push(currentFileDiff)
-  }
-
-  return fileDiffs
-}
-
-function getFilenameFromDiffHeader(header: string): string {
-  // Extract the filename from the diff header
-  const startIndex = header.indexOf(' a/') + 3
-  const endIndex = header.indexOf(' b/', startIndex)
-  const filename = header.substring(startIndex, endIndex)
-  return filename
 }
 
 function getLineInfoFromHeaderLine(line: string): {
