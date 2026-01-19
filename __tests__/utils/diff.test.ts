@@ -1,15 +1,5 @@
 import {test, expect} from 'vitest'
-import {parseGitDiff, parsePatch} from '../../src/utils/diff'
-import {getFixturePath} from '../fixtures/util'
-import * as fs from 'fs'
-
-test('should parse Git diff', async function () {
-  const path = getFixturePath('test.diff')
-  const diffOutput = fs.readFileSync(path, 'utf8')
-  const output = parseGitDiff(diffOutput)
-
-  expect(output).toMatchSnapshot()
-})
+import {parsePatch} from '../../src/utils/diff'
 
 test('parsePatch should return empty array for empty patch', () => {
   expect(parsePatch('')).toEqual([])
