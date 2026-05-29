@@ -22,5 +22,5 @@ inputs:
     required: false
     description: "Log debugging information. Comma-separated list of possible values `coverage`, `pr_lines_added`"
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dist/index.js'
