@@ -165,4 +165,24 @@ test('annotate skips the API when there are no annotations', async function () {
   expect(update).not.toHaveBeenCalled()
 })
 
+test('build annotations at failure level', function () {
+  const githubUtil = new GithubUtil('1234', 'https://api.github.com')
+
+  const annotations = githubUtil.buildAnnotations(
+    [{fileName: 'file1.txt', missingLineNumbers: [132]}],
+    {'file1.txt': [{end_line: 139, start_line: 132}]},
+    'failure'
+  )
+
+  expect(annotations).toEqual([
+    {
+      path: 'file1.txt',
+      start_line: 132,
+      end_line: 132,
+      annotation_level: 'failure',
+      message: 'This line is not covered by a test'
+    }
+  ])
+})
+
 // @todo test for rest of github class

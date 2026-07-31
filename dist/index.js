@@ -50521,7 +50521,7 @@ class GithubUtil {
         }
         return lastResponseStatus;
     }
-    buildAnnotations(coverageFiles, pullRequestFiles) {
+    buildAnnotations(coverageFiles, pullRequestFiles, annotationLevel = 'warning') {
         const annotations = [];
         for (const current of coverageFiles) {
             // Only annotate relevant files
@@ -50538,7 +50538,7 @@ class GithubUtil {
                         path: current.fileName,
                         start_line: uRange.start_line,
                         end_line: uRange.end_line,
-                        annotation_level: 'warning',
+                        annotation_level: annotationLevel,
                         message
                     });
                 }
@@ -50629,7 +50629,7 @@ async function play() {
         if (debugOpts['pr_lines_added']) {
             info(`PR lines added: ${JSON.stringify(pullRequestFiles)}`);
         }
-        const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
+        const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, FAIL_ON_UNCOVERED_LINES ? 'failure' : 'warning');
         const shouldFail = FAIL_ON_UNCOVERED_LINES && annotations.length > 0;
         // 4. Annotate in github
         await githubUtil.annotate({

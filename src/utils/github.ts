@@ -110,7 +110,8 @@ export class GithubUtil {
 
   buildAnnotations(
     coverageFiles: CoverageFile[],
-    pullRequestFiles: PullRequestFiles
+    pullRequestFiles: PullRequestFiles,
+    annotationLevel: AnnotationLevel = 'warning'
   ): Annotations[] {
     const annotations: Annotations[] = []
     for (const current of coverageFiles) {
@@ -133,7 +134,7 @@ export class GithubUtil {
             path: current.fileName,
             start_line: uRange.start_line,
             end_line: uRange.end_line,
-            annotation_level: 'warning',
+            annotation_level: annotationLevel,
             message
           })
         }
@@ -160,13 +161,15 @@ type InputAnnotateParams = {
   conclusion?: CheckConclusion
 }
 
+export type AnnotationLevel = 'notice' | 'warning' | 'failure'
+
 type Annotations = {
   path: string
   start_line: number
   end_line: number
   start_column?: number
   end_column?: number
-  annotation_level: 'notice' | 'warning' | 'failure'
+  annotation_level: AnnotationLevel
   message: string
 }
 

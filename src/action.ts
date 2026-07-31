@@ -97,7 +97,8 @@ export async function play(): Promise<void> {
     }
     const annotations = githubUtil.buildAnnotations(
       coverageByFile,
-      pullRequestFiles
+      pullRequestFiles,
+      FAIL_ON_UNCOVERED_LINES ? 'failure' : 'warning'
     )
 
     const shouldFail = FAIL_ON_UNCOVERED_LINES && annotations.length > 0

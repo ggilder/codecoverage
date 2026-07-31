@@ -54,9 +54,9 @@ covered by tests:
     FAIL_ON_UNCOVERED_LINES: "true"
 ```
 
-Annotations are still posted at `warning` level so they stay readable inline. To actually
-prevent merging, add the `Annotate` check run to your branch protection rules as a required
-status check.
+With the flag enabled, annotations are posted at `failure` level instead of `warning`.
+To actually prevent merging, add the `Annotate` check run to your branch protection
+rules as a required status check.
 
 ## Usage with GitHub Enterprise Server or Cloud
 
