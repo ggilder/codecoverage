@@ -72,19 +72,10 @@ export class GithubUtil {
     let checkId
     for (let i = 0; i < chunks.length; i++) {
       let status: 'in_progress' | 'completed' | 'queued' = 'in_progress'
-      let conclusion:
-        | 'success'
-        | 'action_required'
-        | 'cancelled'
-        | 'failure'
-        | 'neutral'
-        | 'skipped'
-        | 'stale'
-        | 'timed_out'
-        | undefined = undefined
+      let conclusion: CheckConclusion | undefined = undefined
       if (i === chunks.length - 1) {
         status = 'completed'
-        conclusion = 'success'
+        conclusion = input.conclusion ?? 'success'
       }
       const params = {
         ...github.context.repo,
@@ -153,9 +144,20 @@ export class GithubUtil {
   }
 }
 
+export type CheckConclusion =
+  | 'success'
+  | 'action_required'
+  | 'cancelled'
+  | 'failure'
+  | 'neutral'
+  | 'skipped'
+  | 'stale'
+  | 'timed_out'
+
 type InputAnnotateParams = {
   referenceCommitHash: string
   annotations: Annotations[]
+  conclusion?: CheckConclusion
 }
 
 type Annotations = {

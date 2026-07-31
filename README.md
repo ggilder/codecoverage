@@ -22,6 +22,7 @@ All processing is done within Github Actions, no data is sent to an external ser
 | `GITHUB_BASE_URL`    | **no**   | `https://api.github.com` | Base URL for GitHub API. Required for GitHub Enterprise Server or Cloud.                              |
 | `COVERAGE_FILE_PATH` | **yes**  | -                        | Location of coverage file that was generated                                                          |
 | `COVERAGE_FORMAT`    | **no**   | `lcov`                   | Format of coverage file. May be `lcov`, `clover`, or `go`                                             |
+| `FAIL_ON_UNCOVERED_LINES` | **no** | `false`                | Fail the workflow and the check run if any line added in the pull request is not covered by tests     |
 | `DEBUG`              | **no**   | -                        | Log debugging information. Comma-separated list of possible values `coverage`, `pr_lines_added`       |
 
 ## Usage
@@ -37,6 +38,25 @@ coverage format with values appropriate for your repo:
     COVERAGE_FILE_PATH: "./coverage/lcov.info"
     COVERAGE_FORMAT: "lcov"
 ```
+
+## Blocking pull requests that introduce coverage gaps
+
+By default the action only reports. Set `FAIL_ON_UNCOVERED_LINES` to fail the step and
+mark the `Annotate` check run as failed whenever a line added by the pull request is not
+covered by tests:
+
+```yaml
+- name: Code Coverage Annotation
+  uses: ggilder/codecoverage@v1
+  with:
+    GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    COVERAGE_FILE_PATH: "./coverage/lcov.info"
+    FAIL_ON_UNCOVERED_LINES: "true"
+```
+
+Annotations are still posted at `warning` level so they stay readable inline. To actually
+prevent merging, add the `Annotate` check run to your branch protection rules as a required
+status check.
 
 ## Usage with GitHub Enterprise Server or Cloud
 
