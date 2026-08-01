@@ -33,6 +33,12 @@ export async function play(): Promise<void> {
       )
     }
 
+    // getBooleanInput throws on an empty string, which happens when the action
+    // is invoked without action.yml defaults applied.
+    const FAIL_ON_UNCOVERED_LINES = core.getInput('FAIL_ON_UNCOVERED_LINES')
+      ? core.getBooleanInput('FAIL_ON_UNCOVERED_LINES')
+      : false
+
     const debugOpts = {}
     const DEBUG = core.getInput('DEBUG')
     if (DEBUG) {
@@ -91,15 +97,25 @@ export async function play(): Promise<void> {
     }
     const annotations = githubUtil.buildAnnotations(
       coverageByFile,
-      pullRequestFiles
+      pullRequestFiles,
+      FAIL_ON_UNCOVERED_LINES ? 'failure' : 'warning'
     )
+
+    const shouldFail = FAIL_ON_UNCOVERED_LINES && annotations.length > 0
 
     // 4. Annotate in github
     await githubUtil.annotate({
       referenceCommitHash: githubUtil.getPullRequestRef(),
-      annotations
+      annotations,
+      conclusion: shouldFail ? 'failure' : 'success'
     })
     core.info('Annotation done')
+
+    if (shouldFail) {
+      core.setFailed(
+        `${annotations.length} uncovered line range(s) found in this pull request.`
+      )
+    }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
     core.info(JSON.stringify(error))

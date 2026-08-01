@@ -18,6 +18,10 @@ inputs:
   COVERAGE_FORMAT:
     required: false
     description: 'Format of coverage file. May be `lcov`, `clover`, or `go`.'
+  FAIL_ON_UNCOVERED_LINES:
+    required: false
+    description: 'Fail the workflow and the check run if any line added in the pull request is not covered by tests.'
+    default: 'false'
   DEBUG:
     required: false
     description: "Log debugging information. Comma-separated list of possible values `coverage`, `pr_lines_added`"

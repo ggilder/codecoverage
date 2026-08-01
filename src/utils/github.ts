@@ -72,19 +72,10 @@ export class GithubUtil {
     let checkId
     for (let i = 0; i < chunks.length; i++) {
       let status: 'in_progress' | 'completed' | 'queued' = 'in_progress'
-      let conclusion:
-        | 'success'
-        | 'action_required'
-        | 'cancelled'
-        | 'failure'
-        | 'neutral'
-        | 'skipped'
-        | 'stale'
-        | 'timed_out'
-        | undefined = undefined
+      let conclusion: CheckConclusion | undefined = undefined
       if (i === chunks.length - 1) {
         status = 'completed'
-        conclusion = 'success'
+        conclusion = input.conclusion ?? 'success'
       }
       const params = {
         ...github.context.repo,
@@ -119,7 +110,8 @@ export class GithubUtil {
 
   buildAnnotations(
     coverageFiles: CoverageFile[],
-    pullRequestFiles: PullRequestFiles
+    pullRequestFiles: PullRequestFiles,
+    annotationLevel: AnnotationLevel = 'warning'
   ): Annotations[] {
     const annotations: Annotations[] = []
     for (const current of coverageFiles) {
@@ -142,7 +134,7 @@ export class GithubUtil {
             path: current.fileName,
             start_line: uRange.start_line,
             end_line: uRange.end_line,
-            annotation_level: 'warning',
+            annotation_level: annotationLevel,
             message
           })
         }
@@ -153,10 +145,23 @@ export class GithubUtil {
   }
 }
 
+export type CheckConclusion =
+  | 'success'
+  | 'action_required'
+  | 'cancelled'
+  | 'failure'
+  | 'neutral'
+  | 'skipped'
+  | 'stale'
+  | 'timed_out'
+
 type InputAnnotateParams = {
   referenceCommitHash: string
   annotations: Annotations[]
+  conclusion?: CheckConclusion
 }
+
+export type AnnotationLevel = 'notice' | 'warning' | 'failure'
 
 type Annotations = {
   path: string
@@ -164,7 +169,7 @@ type Annotations = {
   end_line: number
   start_column?: number
   end_column?: number
-  annotation_level: 'notice' | 'warning' | 'failure'
+  annotation_level: AnnotationLevel
   message: string
 }
 

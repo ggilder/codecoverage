@@ -50488,7 +50488,7 @@ class GithubUtil {
             let conclusion = undefined;
             if (i === chunks.length - 1) {
                 status = 'completed';
-                conclusion = 'success';
+                conclusion = input.conclusion ?? 'success';
             }
             const params = {
                 ...github_context.repo,
@@ -50521,7 +50521,7 @@ class GithubUtil {
         }
         return lastResponseStatus;
     }
-    buildAnnotations(coverageFiles, pullRequestFiles) {
+    buildAnnotations(coverageFiles, pullRequestFiles, annotationLevel = 'warning') {
         const annotations = [];
         for (const current of coverageFiles) {
             // Only annotate relevant files
@@ -50538,7 +50538,7 @@ class GithubUtil {
                         path: current.fileName,
                         start_line: uRange.start_line,
                         end_line: uRange.end_line,
-                        annotation_level: 'warning',
+                        annotation_level: annotationLevel,
                         message
                     });
                 }
@@ -50579,6 +50579,11 @@ async function play() {
         if (!SUPPORTED_FORMATS.includes(COVERAGE_FORMAT)) {
             throw new Error(`COVERAGE_FORMAT must be one of ${SUPPORTED_FORMATS.join(',')}`);
         }
+        // getBooleanInput throws on an empty string, which happens when the action
+        // is invoked without action.yml defaults applied.
+        const FAIL_ON_UNCOVERED_LINES = getInput('FAIL_ON_UNCOVERED_LINES')
+            ? getBooleanInput('FAIL_ON_UNCOVERED_LINES')
+            : false;
         const debugOpts = {};
         const DEBUG = getInput('DEBUG');
         if (DEBUG) {
@@ -50624,13 +50629,18 @@ async function play() {
         if (debugOpts['pr_lines_added']) {
             info(`PR lines added: ${JSON.stringify(pullRequestFiles)}`);
         }
-        const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles);
+        const annotations = githubUtil.buildAnnotations(coverageByFile, pullRequestFiles, FAIL_ON_UNCOVERED_LINES ? 'failure' : 'warning');
+        const shouldFail = FAIL_ON_UNCOVERED_LINES && annotations.length > 0;
         // 4. Annotate in github
         await githubUtil.annotate({
             referenceCommitHash: githubUtil.getPullRequestRef(),
-            annotations
+            annotations,
+            conclusion: shouldFail ? 'failure' : 'success'
         });
         info('Annotation done');
+        if (shouldFail) {
+            setFailed(`${annotations.length} uncovered line range(s) found in this pull request.`);
+        }
     }
     catch (error) {
         if (error instanceof Error)
